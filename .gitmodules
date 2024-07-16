@@ -1,9 +1,12 @@
 [submodule "crates-pro"]
-	path = crates-pro
+	path = submodules/crates-pro
 	url = https://github.com/crates-pro/crates-pro
 [submodule "performance-benchmark"]
-	path = performance-benchmark
+	path = submodules/performance-benchmark
 	url = https://github.com/crates-pro/performance-benchmark
 [submodule "sensleak-rs"]
-	path = sensleak-rs
+	path = submodules/sensleak-rs
 	url = https://github.com/crates-pro/sensleak-rs
+[submodule "prelude"]
+	path = prelude
+	url = https://github.com/facebook/buck2-prelude
