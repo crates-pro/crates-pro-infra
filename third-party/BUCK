@@ -1143,6 +1143,12 @@ cargo.rust_library(
     visibility = [],
 )
 
+alias(
+    name = "futures",
+    actual = ":futures-0.3.30",
+    visibility = ["PUBLIC"],
+)
+
 http_archive(
     name = "futures-0.3.30.crate",
     sha256 = "645c6916888f6cb6350d2550b80fb63e734897a8498abe35cfb732b6487804b0",
@@ -1159,12 +1165,17 @@ cargo.rust_library(
     edition = "2018",
     features = [
         "alloc",
+        "async-await",
+        "default",
+        "executor",
+        "futures-executor",
         "std",
     ],
     visibility = [],
     deps = [
         ":futures-channel-0.3.30",
         ":futures-core-0.3.30",
+        ":futures-executor-0.3.30",
         ":futures-io-0.3.30",
         ":futures-sink-0.3.30",
         ":futures-task-0.3.30",
@@ -1298,6 +1309,29 @@ cargo.rust_library(
 )
 
 http_archive(
+    name = "futures-macro-0.3.30.crate",
+    sha256 = "87750cf4b7a4c0625b1529e4c543c2182106e4dedc60a2a6455e00d212c489ac",
+    strip_prefix = "futures-macro-0.3.30",
+    urls = ["https://static.crates.io/crates/futures-macro/0.3.30/download"],
+    visibility = [],
+)
+
+cargo.rust_library(
+    name = "futures-macro-0.3.30",
+    srcs = [":futures-macro-0.3.30.crate"],
+    crate = "futures_macro",
+    crate_root = "futures-macro-0.3.30.crate/src/lib.rs",
+    edition = "2018",
+    proc_macro = True,
+    visibility = [],
+    deps = [
+        ":proc-macro2-1.0.86",
+        ":quote-1.0.36",
+        ":syn-2.0.71",
+    ],
+)
+
+http_archive(
     name = "futures-sink-0.3.30.crate",
     sha256 = "9fb8e00e87438d937621c1c6269e53f536c14d3fbd6a042bb24879e57d474fb5",
     strip_prefix = "futures-sink-0.3.30",
@@ -1355,9 +1389,12 @@ cargo.rust_library(
     edition = "2018",
     features = [
         "alloc",
+        "async-await",
+        "async-await-macro",
         "channel",
         "futures-channel",
         "futures-io",
+        "futures-macro",
         "futures-sink",
         "io",
         "memchr",
@@ -1370,6 +1407,7 @@ cargo.rust_library(
         ":futures-channel-0.3.30",
         ":futures-core-0.3.30",
         ":futures-io-0.3.30",
+        ":futures-macro-0.3.30",
         ":futures-sink-0.3.30",
         ":futures-task-0.3.30",
         ":memchr-2.7.4",
@@ -3694,7 +3732,7 @@ cargo.rust_library(
         ":serde_json-1.0.120",
         ":sqlx-0.7.4",
         ":strum-0.25.0",
-        ":thiserror-1.0.62",
+        ":thiserror-1.0.63",
         ":time-0.3.36",
         ":tracing-0.1.40",
         ":url-2.5.2",
@@ -4367,7 +4405,7 @@ cargo.rust_library(
         ":sha2-0.10.8",
         ":smallvec-1.13.2",
         ":sqlformat-0.2.4",
-        ":thiserror-1.0.62",
+        ":thiserror-1.0.63",
         ":time-0.3.36",
         ":tokio-1.38.1",
         ":tokio-stream-0.1.15",
@@ -4527,7 +4565,7 @@ cargo.rust_library(
         ":smallvec-1.13.2",
         ":sqlx-core-0.7.4",
         ":stringprep-0.1.5",
-        ":thiserror-1.0.62",
+        ":thiserror-1.0.63",
         ":time-0.3.36",
         ":tracing-0.1.40",
         ":uuid-1.10.0",
@@ -4599,7 +4637,7 @@ cargo.rust_library(
         ":smallvec-1.13.2",
         ":sqlx-core-0.7.4",
         ":stringprep-0.1.5",
-        ":thiserror-1.0.62",
+        ":thiserror-1.0.63",
         ":time-0.3.36",
         ":tracing-0.1.40",
         ":uuid-1.10.0",
@@ -4882,36 +4920,36 @@ cargo.rust_library(
 )
 
 http_archive(
-    name = "thiserror-1.0.62.crate",
-    sha256 = "f2675633b1499176c2dff06b0856a27976a8f9d436737b4cf4f312d4d91d8bbb",
-    strip_prefix = "thiserror-1.0.62",
-    urls = ["https://static.crates.io/crates/thiserror/1.0.62/download"],
+    name = "thiserror-1.0.63.crate",
+    sha256 = "c0342370b38b6a11b6cc11d6a805569958d54cfa061a29969c3b5ce2ea405724",
+    strip_prefix = "thiserror-1.0.63",
+    urls = ["https://static.crates.io/crates/thiserror/1.0.63/download"],
     visibility = [],
 )
 
 cargo.rust_library(
-    name = "thiserror-1.0.62",
-    srcs = [":thiserror-1.0.62.crate"],
+    name = "thiserror-1.0.63",
+    srcs = [":thiserror-1.0.63.crate"],
     crate = "thiserror",
-    crate_root = "thiserror-1.0.62.crate/src/lib.rs",
+    crate_root = "thiserror-1.0.63.crate/src/lib.rs",
     edition = "2021",
     visibility = [],
-    deps = [":thiserror-impl-1.0.62"],
+    deps = [":thiserror-impl-1.0.63"],
 )
 
 http_archive(
-    name = "thiserror-impl-1.0.62.crate",
-    sha256 = "d20468752b09f49e909e55a5d338caa8bedf615594e9d80bc4c565d30faf798c",
-    strip_prefix = "thiserror-impl-1.0.62",
-    urls = ["https://static.crates.io/crates/thiserror-impl/1.0.62/download"],
+    name = "thiserror-impl-1.0.63.crate",
+    sha256 = "a4558b58466b9ad7ca0f102865eccc95938dca1a74a856f2b57b6629050da261",
+    strip_prefix = "thiserror-impl-1.0.63",
+    urls = ["https://static.crates.io/crates/thiserror-impl/1.0.63/download"],
     visibility = [],
 )
 
 cargo.rust_library(
-    name = "thiserror-impl-1.0.62",
-    srcs = [":thiserror-impl-1.0.62.crate"],
+    name = "thiserror-impl-1.0.63",
+    srcs = [":thiserror-impl-1.0.63.crate"],
     crate = "thiserror_impl",
-    crate_root = "thiserror-impl-1.0.62.crate/src/lib.rs",
+    crate_root = "thiserror-impl-1.0.63.crate/src/lib.rs",
     edition = "2021",
     proc_macro = True,
     visibility = [],
