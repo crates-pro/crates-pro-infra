@@ -1,0 +1,9 @@
+env = { CARGO_MANIFEST_DIR = "ring-0.17.8.crate", RING_CORE_PREFIX = "ring_core_0_17_8_" }
+rustc_flags = [
+    "-Lnative=$(location :ring-0.17.8-build-script-run[out_dir])",
+    "-lstatic=ring_core_0_17_8_",
+]
+
+[[buildscript]]
+[buildscript.gen_srcs]
+env = { CARGO_MANIFEST_LINKS = "ring_core_0_17_8", OPT_LEVEL = "3" }
