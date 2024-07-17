@@ -17,3 +17,6 @@
 
 [build]
   execution_platforms = prelude//platforms:default
+
+[project]
+  ignore = .git, target

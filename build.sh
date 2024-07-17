@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+reindeer --third-party-dir third-party buckify
+buck2 targets //...
