@@ -2559,6 +2559,24 @@ cargo.rust_library(
 )
 
 http_archive(
+    name = "matchers-0.1.0.crate",
+    sha256 = "8263075bb86c5a1b1427b5ae862e8889656f126e9f77c484496e8b47cf5c5558",
+    strip_prefix = "matchers-0.1.0",
+    urls = ["https://static.crates.io/crates/matchers/0.1.0/download"],
+    visibility = [],
+)
+
+cargo.rust_library(
+    name = "matchers-0.1.0",
+    srcs = [":matchers-0.1.0.crate"],
+    crate = "matchers",
+    crate_root = "matchers-0.1.0.crate/src/lib.rs",
+    edition = "2018",
+    visibility = [],
+    deps = [":regex-automata-0.1.10"],
+)
+
+http_archive(
     name = "md-5-0.10.6.crate",
     sha256 = "d89e7ee0cfbedfc4da3340218492196241d89eefb6dab27de5df917a6d2e78cf",
     strip_prefix = "md-5-0.10.6",
@@ -3925,6 +3943,8 @@ cargo.rust_library(
         "perf-literal",
         "perf-onepass",
         "std",
+        "unicode-case",
+        "unicode-perl",
     ],
     visibility = [],
     deps = [
@@ -3933,6 +3953,29 @@ cargo.rust_library(
         ":regex-automata-0.4.7",
         ":regex-syntax-0.8.4",
     ],
+)
+
+http_archive(
+    name = "regex-automata-0.1.10.crate",
+    sha256 = "6c230d73fb8d8c1b9c0b3135c5142a8acee3a0558fb8db5cf1cb65f8d7862132",
+    strip_prefix = "regex-automata-0.1.10",
+    urls = ["https://static.crates.io/crates/regex-automata/0.1.10/download"],
+    visibility = [],
+)
+
+cargo.rust_library(
+    name = "regex-automata-0.1.10",
+    srcs = [":regex-automata-0.1.10.crate"],
+    crate = "regex_automata",
+    crate_root = "regex-automata-0.1.10.crate/src/lib.rs",
+    edition = "2015",
+    features = [
+        "default",
+        "regex-syntax",
+        "std",
+    ],
+    visibility = [],
+    deps = [":regex-syntax-0.6.29"],
 )
 
 http_archive(
@@ -3963,6 +4006,9 @@ cargo.rust_library(
         "perf-literal-substring",
         "std",
         "syntax",
+        "unicode-case",
+        "unicode-perl",
+        "unicode-word-boundary",
     ],
     visibility = [],
     deps = [
@@ -3970,6 +4016,34 @@ cargo.rust_library(
         ":memchr-2.7.4",
         ":regex-syntax-0.8.4",
     ],
+)
+
+http_archive(
+    name = "regex-syntax-0.6.29.crate",
+    sha256 = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1",
+    strip_prefix = "regex-syntax-0.6.29",
+    urls = ["https://static.crates.io/crates/regex-syntax/0.6.29/download"],
+    visibility = [],
+)
+
+cargo.rust_library(
+    name = "regex-syntax-0.6.29",
+    srcs = [":regex-syntax-0.6.29.crate"],
+    crate = "regex_syntax",
+    crate_root = "regex-syntax-0.6.29.crate/src/lib.rs",
+    edition = "2018",
+    features = [
+        "default",
+        "unicode",
+        "unicode-age",
+        "unicode-bool",
+        "unicode-case",
+        "unicode-gencat",
+        "unicode-perl",
+        "unicode-script",
+        "unicode-segment",
+    ],
+    visibility = [],
 )
 
 http_archive(
@@ -3986,7 +4060,11 @@ cargo.rust_library(
     crate = "regex_syntax",
     crate_root = "regex-syntax-0.8.4.crate/src/lib.rs",
     edition = "2021",
-    features = ["std"],
+    features = [
+        "std",
+        "unicode-case",
+        "unicode-perl",
+    ],
     visibility = [],
 )
 
@@ -6514,21 +6592,30 @@ cargo.rust_library(
         "alloc",
         "ansi",
         "default",
+        "env-filter",
         "fmt",
+        "matchers",
         "nu-ansi-term",
+        "once_cell",
+        "regex",
         "registry",
         "sharded-slab",
         "smallvec",
         "std",
         "thread_local",
+        "tracing",
         "tracing-log",
     ],
     visibility = [],
     deps = [
+        ":matchers-0.1.0",
         ":nu-ansi-term-0.46.0",
+        ":once_cell-1.19.0",
+        ":regex-1.10.5",
         ":sharded-slab-0.1.7",
         ":smallvec-1.13.2",
         ":thread_local-1.1.8",
+        ":tracing-0.1.40",
         ":tracing-core-0.1.32",
         ":tracing-log-0.2.0",
     ],
