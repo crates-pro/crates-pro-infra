@@ -15,8 +15,8 @@ We are in the first stage, using Buck2 to build all components. Progress on buil
 - [ ] `crates-pro/crates-pro`
   - [ ] crates-pro (bin)
     - [X] crates_sync
-    - [ ] repo_import
-    - [ ] model
+    - [X] model
+    - [X] repo_import
     - [ ] tudriver
     - [ ] tuplugins/plugin1
     - [ ] tuplugins/plugin2

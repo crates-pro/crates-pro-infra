@@ -2,3 +2,5 @@
 /target
 
 /fixups/borsh/*
+/fixups/libssh2-sys/*
+/fixups/openssl-sys/*
