@@ -1,0 +1,8 @@
+{
+    "name": "buck2-build",
+    "dockerFile": "../Dockerfile",
+    "runArgs": [
+        "--platform=linux/amd64"
+    ],
+    "workspaceFolder": "/workdir"
+}

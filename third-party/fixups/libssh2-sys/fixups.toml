@@ -1,0 +1,3 @@
+[[buildscript]]
+[buildscript.gen_srcs]
+env = { DEP_OPENSSL_INCLUDE = "/usr/include/openssl", PROFILE = "release", OPT_LEVEL = "3" }
