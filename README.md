@@ -12,14 +12,14 @@ buck2-build is a Buck2-powered build/test orchestrator for creates-pro and its p
 
 We are in the first stage, using Buck2 to build all components. Progress on build targets:
 
-- [ ] `crates-pro/crates-pro`
-  - [ ] crates-pro (bin)
+- [X] `crates-pro/crates-pro`
+  - [X] crates-pro (bin)
     - [X] crates_sync
     - [X] model
     - [X] repo_import
-    - [ ] tudriver
-    - [ ] tuplugins/plugin1
-    - [ ] tuplugins/plugin2
+    - [X] tudriver
+    - [X] tuplugins/plugin1
+    - [X] tuplugins/plugin2
 - [ ] `crates-pro/performance-benchmark`
   - [ ] …
 - [ ] `crates-pro/sensleak-rs`
