@@ -8,6 +8,29 @@ buck2-build is a Buck2-powered build/test orchestrator for creates-pro and its p
 2. Run tests for components individually and collectively
 3. Deploy and enable rebuilding without service interruption
 
+## Usage
+
+buck2-build provides a build environment for crates-pro. You can use it with VS Code Dev Containers by either building the Docker image locally or using our pre-built image from DockerHub.
+
+#### Option 1: Build the image locally
+
+By default, Dev Containers uses the local `Dockerfile` at the project root to build the image and start the container.
+
+#### Option 2: Use the pre-built image
+
+For better performance on the first run, you can use our pre-built Docker image. To do this, modify the `.devcontainer/devcontainer.json` file as follows:
+
+```diff
+  {
+      "name": "crates-pro-buck2-build",
+-     "dockerFile": "../Dockerfile",
++     "image": "duinomaker/crates-pro-buck2-build:0.1.0",
+      "runArgs": [
+  ...
+```
+
+This change instructs Dev Containers to use the pre-built image instead of building it locally.
+
 ## Current Status
 
 We are in the first stage, using Buck2 to build all components. Progress on build targets:
