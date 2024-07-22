@@ -24,7 +24,7 @@ For better performance on the first run, you can use our pre-built Docker image.
   {
       "name": "crates-pro-buck2-build",
 -     "dockerFile": "../Dockerfile",
-+     "image": "duinomaker/crates-pro-buck2-build:0.1.0",
++     "image": "duinomaker/crates-pro-buck2-build:0.1.1",
       "runArgs": [
   ...
 ```
@@ -36,17 +36,25 @@ This change instructs Dev Containers to use the pre-built image instead of build
 We are in the first stage, using Buck2 to build all components. Progress on build targets:
 
 - [X] `crates-pro/crates-pro`
-  - [X] crates-pro (bin)
-    - [X] crates_sync
-    - [X] model
-    - [X] repo_import
-    - [X] tudriver
-    - [X] tuplugins/plugin1
-    - [X] tuplugins/plugin2
-- [ ] `crates-pro/performance-benchmark`
-  - [ ] …
+  - [X] crates-pro
+  - [X] crates_sync
+  - [X] model
+  - [X] repo_import
+  - [X] tudriver
+  - [X] tuplugins/plugin1
+  - [X] tuplugins/plugin2
+- [X] `crates-pro/performance-benchmark`
+  - [X] collector/collector (lib)
+  - [X] collector/collector (bin)
+  - [X] collector/flamegraph-fake
+  - [X] collector/muti-rustc-perf
+  - [X] collector/runtime-fake
+  - [X] collector/rustc-fake
+  - [X] data_manage/manager
 - [ ] `crates-pro/sensleak-rs`
-  - [ ] …
+  - [ ] api
+  - [ ] scan
+  - [ ] sensleak
 
 ## License
 
