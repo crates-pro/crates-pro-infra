@@ -24,7 +24,7 @@ For better performance on the first run, you can use our pre-built Docker image.
   {
       "name": "crates-pro-buck2-build",
 -     "dockerFile": "../Dockerfile",
-+     "image": "duinomaker/crates-pro-buck2-build:0.1.1",
++     "image": "duinomaker/crates-pro-buck2-build:0.1.2",
       "runArgs": [
   ...
 ```
@@ -51,10 +51,10 @@ We are in the first stage, using Buck2 to build all components. Progress on buil
   - [X] collector/runtime-fake
   - [X] collector/rustc-fake
   - [X] data_manage/manager
-- [ ] `crates-pro/sensleak-rs`
-  - [ ] api
-  - [ ] scan
-  - [ ] sensleak
+- [X] `crates-pro/sensleak-rs`
+  - [X] sensleak
+  - [X] api
+  - [X] scan
 
 ## License
 
@@ -68,7 +68,7 @@ at your option.
 This project includes the following submodules with their respective licenses:
 
 - `crates-pro/crates-pro`: Dual-licensed under Apache-2.0 and MIT
-- `crates-pro/performance-benchmark`: No specified license
+- `crates-pro/performance-benchmark`: Dual-licensed under Apache-2.0 and MIT
 - `crates-pro/sensleak-rs`: Licensed under MIT
 
 Please note that while the main project is dual-licensed, the submodules may have different licensing terms. Make sure to comply with the license terms of each submodule when using or distributing this project.

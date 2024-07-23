@@ -16,6 +16,8 @@ path = "top/main.rs"
 # and all options Cargo supports.
 [dependencies]
 anyhow = "1"
+assert_cmd = "2.0.10"
+axum = { version = "0.7.4", features = ["macros"] }
 base64 = "0.22"
 cargo_metadata = "0.18"
 chrono = "0.4.37"
@@ -23,21 +25,25 @@ clap = { version = "3.0.9", features = ["derive"] }
 crossbeam-utils = "0.8"
 csv = "1.1.0"
 dotenvy = "0.15.7"
-env_logger = "0.10.1"
+env_logger = "0.11"
 filetime = "0.2.14"
 futures = "0.3"
 git2 = "0.19.0"
+hyper = { version = "1.2.0", features = ["full"] }
 jobserver = "0.1.21"
+lalrpop = "0.20.0"
 lalrpop-util = { version = "0.20.0", features = ["lexer", "unicode"] }
 lazy_static = "1.4.0"
 libc = "0.2"
 log = "0.4.21"
+mockito = "1.0.2"
 nalgebra = "0.32.4"
 neo4rs = "0.7.1"
 once_cell = "1.8.0"
 plotters = "0.3.5"
+postgres = "0.19.7"
 pretty_env_logger = "0.5"
-rayon = "1.5"
+rayon = "1.9"
 rdkafka = { version = "0.36.2", features = ["cmake-build"] }
 regex = "1.10.2"
 sea-orm = { version = "0.12.15", features = [
@@ -55,16 +61,16 @@ tempfile = "3.10.1"
 thiserror = "1"
 tokio = { version = "1.36", features = ["full"] }
 toml = "0.8"
+tower-http = { version = "0.5.0", features = ["cors"] }
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tugraph = "0.1.4"
 tugraph-plugin-util = "0.1.2"
 url = "2.2.2"
+utoipa = { version = "4.2.0", features = ["axum_extras"] }
+utoipa-swagger-ui = { version = "7", features = ["axum"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
-walkdir = "2.3"
-
-[build-dependencies]
-lalrpop = "0.20.0"
+walkdir = "2.5"
 
 # Local patches - typically git references
 [patch.crates-io]

@@ -1,4 +1,8 @@
 #!/usr/bin/bash
+set -e
+# Uncomment the following line to re-generate `third-party/BUCK` and `third-party-extra/BUCK`
+# ./gendeps.sh
+
 # crates-pro
 buck2 build //submodules/crates-pro:crates_sync#check
 buck2 build //submodules/crates-pro:model#check
@@ -15,3 +19,8 @@ buck2 build //submodules/performance-benchmark:muti-rustc-perf#check
 buck2 build //submodules/performance-benchmark:runtime-fake#check
 buck2 build //submodules/performance-benchmark:rustc-fake#check
 buck2 build //submodules/performance-benchmark:manager#check
+
+# sensleak-rs
+buck2 build //submodules/sensleak-rs:sensleak#check
+buck2 build //submodules/sensleak-rs:api#check
+buck2 build //submodules/sensleak-rs:scan#check
