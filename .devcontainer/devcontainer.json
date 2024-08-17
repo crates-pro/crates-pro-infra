@@ -4,5 +4,6 @@
     "runArgs": [
         "--platform=linux/amd64"
     ],
-    "workspaceFolder": "/workdir"
+    "workspaceFolder": "/workdir",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workdir,type=bind"
 }

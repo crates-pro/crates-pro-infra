@@ -1,8 +1,3 @@
-rustc_flags = [
-    "-Lnative=$(location :libtugraph-sys-0.1.2+3.5.0-build-script-run[out_dir])",
-    "-ldylib=lgraph",
-]
-
 [[buildscript]]
 [buildscript.gen_srcs]
 env = { LGRAPH_C_COMPILER = "/usr/local/bin/gcc", LGRAPH_CXX_COMPILER = "/usr/local/bin/g++", NUM_JOBS = "8" }
