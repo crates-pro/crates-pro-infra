@@ -16,21 +16,26 @@ To regenerate the `BUCK` file from `Cargo.toml`, run:
 
 When Reindeer-generated rules fail to build, we apply the following process:
 
-1. Write fixups
-2. Implement additional workarounds if 1 is not sufficient
-3. Regenerate rules
-4. Attempt to build again
+1. Write fixups and patches
+2. Regenerate rules
+3. Attempt to build again
 
 #### Fixups
 
-Fixups are defined in `./fixups/<package>/fixups.toml`, where `<package>` is the name of the crate without version information. For more details, see the [Reindeer Manual](https://github.com/facebookincubator/reindeer/blob/main/docs/MANUAL.md).
+We use two types of fixups to resolve build issues:
 
-#### Additional Workarounds
+1. Fixup files: Located in `./fixups/<package>/fixups.toml`, where `<package>` is the crate name without version information.
+2. Script-based fixups: Implemented directly in the `./run.sh` script.
 
-When fixups alone aren't sufficient, we implement additional workarounds in:
+**Fixup files** are TOML files that provide additional configuration for Reindeer when generating build rules. They work in conjunction with `Cargo.toml` to refine the build rule. For more details on how to write a fixup, refer to the [Reindeer Manual](https://github.com/facebookincubator/reindeer/blob/main/docs/MANUAL.md).
 
-- `./run.sh`
-- `./fixups/<package>/fixups.toml` containing version information
+**Script-based fixups** are located in `./run.sh`. This script executes Reindeer to generate an initial `BUCK` file, then add additional modifications to the `BUCK` file.
+
+Fixups may be version-specific, always update them to match the package versions in the `BUCK` file. Refer to the "Maintenance" section below for deatils.
+
+#### Patches
+
+Patches are stored in the `vendor` directory. Currently, there's a patch for the `utoipa-swagger-ui` crate.
 
 ## Maintenance
 
@@ -60,4 +65,20 @@ ring=0.17.8
 
 If versions differ, update the corresponding `./fixups/**/fixups.toml`.
 
-Remember, additional workarounds are version-specific. Always update them to match the package versions in the `BUCK` file.
+#### Step 3: Update patches
+
+We currently maintain a patch for the `utoipa-swagger-ui` crate in the `vendor` directory.:
+
+Patch location: `vendor/utoipa-swagger-ui-7.1.0-patch1`
+
+How the patch works:
+
+1. The original `build.rs` script downloads resources at build time, which can be problematic.
+2. To avoid this, we pre-download the resources in the remote builder Docker image.
+3. We then modify `src/lib.rs` to use these pre-downloaded resources instead of relying on `build.rs`.
+
+When updating `utoipa-swagger-ui`:
+
+1. Update the patch accordingly.
+2. Ensure that the remote builder image downloads the correct version of resources.
+3. Verify that `src/lib.rs` correctly references the pre-downloaded resources.

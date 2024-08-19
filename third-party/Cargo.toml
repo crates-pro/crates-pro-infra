@@ -69,7 +69,7 @@ tugraph = "0.1.4"
 tugraph-plugin-util = "0.1.2"
 url = "2.2.2"
 utoipa = { version = "4.2.0", features = ["axum_extras"] }
-utoipa-swagger-ui = { version = "7", features = ["axum"] }
+utoipa-swagger-ui = { path = "vendor/utoipa-swagger-ui-7.1.0-patch1", features = ["axum"] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 walkdir = "2.5"
 

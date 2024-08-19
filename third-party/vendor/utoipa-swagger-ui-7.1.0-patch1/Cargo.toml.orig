@@ -1,0 +1,61 @@
+[package]
+name = "utoipa-swagger-ui"
+description = "Swagger UI for utoipa"
+version = "7.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["swagger-ui", "openapi", "documentation"]
+repository = "https://github.com/juhaku/utoipa"
+categories = ["web-programming"]
+authors = ["Juha Kukkonen <juha7kukkonen@gmail.com>"]
+rust-version.workspace = true
+
+[features]
+default = ["url"]
+debug = []
+debug-embed = ["rust-embed/debug-embed"]
+reqwest = ["dep:reqwest"]
+url = ["dep:url"]
+vendored = ["dep:utoipa-swagger-ui-vendored"]
+
+[dependencies]
+rust-embed = { version = "8" }
+mime_guess = { version = "2.0" }
+actix-web = { version = "4", optional = true, default-features = false }
+rocket = { version = "0.5", features = ["json"], optional = true }
+axum = { version = "0.7", default-features = false, features = [
+    "json",
+], optional = true }
+utoipa = { version = "4", path = "../utoipa" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+
+[dev-dependencies]
+similar = "2.5"
+
+[package.metadata.docs.rs]
+features = ["actix-web", "axum", "rocket", "vendored"]
+no-default-features = true
+rustdoc-args = ["--cfg", "doc_cfg"]
+
+[build-dependencies]
+zip = { version = "1", default-features = false, features = ["deflate"] }
+regex = "1.7"
+
+# enabled optionally to allow rust only build with expense of bigger dependency tree and platform
+# independant build. By default `curl` system package is tried for downloading the Swagger UI.
+reqwest = { version = "0.12", features = [
+    "blocking",
+    "rustls-tls",
+], default-features = false, optional = true }
+url = { version = "2.5", optional = true }
+utoipa-swagger-ui-vendored = { version = "0.1", path = "../utoipa-swagger-ui-vendored", optional = true }
+
+# Windows is forced to use reqwest to download the Swagger UI.
+[target.'cfg(windows)'.build-dependencies]
+reqwest = { version = "0.12", features = [
+    "blocking",
+    "rustls-tls",
+], default-features = false }
+utoipa-swagger-ui-vendored = { version = "0.1", path = "../utoipa-swagger-ui-vendored", optional = true }
