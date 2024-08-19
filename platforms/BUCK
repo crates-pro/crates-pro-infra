@@ -1,0 +1,9 @@
+load(":defs.bzl", "remote_execution_platform")
+
+remote_execution_platform(
+    name = "nativelink",
+    cpu_configuration = "prelude//cpu:x86_64",
+    os_configuration = "prelude//os:linux",
+    use_windows_path_separators = False,
+    visibility = ["PUBLIC"],
+)

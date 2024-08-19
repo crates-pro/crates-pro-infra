@@ -15,8 +15,15 @@
 [parser]
   target_platform_detector_spec = target:root//...->prelude//platforms:default
 
+[buck2_re_client]
+  action_cache_address = grpc://172.17.0.1:30051
+  engine_address = grpc://172.17.0.1:30051
+  cas_address = grpc://172.17.0.1:30051
+  tls = false
+  instance_name = main
+
 [build]
-  execution_platforms = prelude//platforms:default
+  execution_platforms = root//platforms:nativelink
 
 [project]
   ignore = .git, target
