@@ -9,7 +9,7 @@ old_env='"OUT_DIR": "\$(location :mime_guess-\(2\.0\.[0-9]\+\)-build-script-run\
 new_env='"MIME_TYPES_GENERATED_PATH": "\$(location :mime_guess-\1-build-script-run\[out_dir\])/mime_types_generated\.rs",'
 sed -i "s|$old_env|$new_env|" ./BUCK
 
-# Additional fixup for //submodules/crates-pro/tuplugins:plugin1 and //submodules/crates-pro/tuplugins:plugin2
+# Additional fixup for //project/crates-pro/tuplugins:plugin1 and //project/crates-pro/tuplugins:plugin2
 cat << EOF >> ./BUCK
 alias(
     name = "libtugraph-sys-build-script-run",

@@ -10941,6 +10941,12 @@ cargo.rust_library(
     ],
 )
 
+alias(
+    name = "tokio-postgres",
+    actual = ":tokio-postgres-0.7.11",
+    visibility = ["PUBLIC"],
+)
+
 http_archive(
     name = "tokio-postgres-0.7.11.crate",
     sha256 = "03adcf0147e203b6032c0b2d30be1415ba03bc348901f3ff1cc0df6a733e60c3",
