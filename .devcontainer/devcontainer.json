@@ -1,5 +1,5 @@
 {
-    "name": "crates-pro-buck2-build",
+    "name": "crates-pro-infra",
     "dockerFile": "../Dockerfile",
     "runArgs": [
         "--platform=linux/amd64"

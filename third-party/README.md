@@ -1,16 +1,32 @@
 # Third-party Dependencies
 
-This folder manages third-party dependencies for the project. The `Cargo.toml` file here is a merged manifest that includes all Rust crate dependencies used across the project.
-
-We use [Reindeer](https://github.com/facebookincubator/reindeer) to import these crate dependencies and generate Buck build rules (`./BUCK`).
+This folder manages third-party dependencies for the Crates Pro project. We utilize `Cargo.toml` to list all required crates.io dependencies across all Crates Pro modules. [Reindeer](https://github.com/facebookincubator/reindeer) is then used to to analyze these dependencies and generate Buck2 build rules in the `./BUCK` file. This setup allows you to reference depndencies using the format `//third-party:<package name>` in your own build rules.
 
 ## Usage
 
-To regenerate the `BUCK` file from `Cargo.toml`, run:
+### Step 1: Add new dependencies
+
+To add a new crates.io dependency, open the `Cargo.toml` file in this directory, then add the new dependency as you would in a standard Rust project.
+
+If you encounter a _major version conflict_ with an existing dependency, use the renaming technique. For example, if "clap==4.5" already exists but you need "clap==3.0":
+
+```diff
+- clap = "4.5"
++ clap = { package = "clap", version = "4.5" }
++ clap-3 = { package = "clap", version = "3.0" }
+```
+
+You can then reference "clap==3.0" as `//third-party:clap-3` in your build rules.
+
+### Step 2: Regenerate Build Rules
+
+After adding or modifying dependencies, regenerate the `./BUCK` file to make your changes available, by running the following command:
 
 ```bash
 ./run.sh
 ```
+
+This script will analyze the dependencies in `Cargo.toml` and generate the corresponding Buck2 build rules in `./BUCK`.
 
 ## Resolving Build Issues
 
@@ -20,11 +36,11 @@ When Reindeer-generated rules fail to build, we apply the following process:
 2. Regenerate rules
 3. Attempt to build again
 
-#### Fixups
+### Fixups
 
 We use two types of fixups to resolve build issues:
 
-1. Fixup files: Located in `./fixups/<package>/fixups.toml`, where `<package>` is the crate name without version information.
+1. Fixup files: Located in `./fixups/<package name>/fixups.toml`, where `<package name>` is the crate name without version information.
 2. Script-based fixups: Implemented directly in the `./run.sh` script.
 
 **Fixup files** are TOML files that provide additional configuration for Reindeer when generating build rules. They work in conjunction with `Cargo.toml` to refine the build rule. For more details on how to write a fixup, refer to the [Reindeer Manual](https://github.com/facebookincubator/reindeer/blob/main/docs/MANUAL.md).
@@ -33,7 +49,7 @@ We use two types of fixups to resolve build issues:
 
 Fixups may be version-specific, always update them to match the package versions in the `BUCK` file. Refer to the "Maintenance" section below for deatils.
 
-#### Patches
+### Patches
 
 Patches are stored in the `vendor` directory. Currently, there's a patch for the `utoipa-swagger-ui` crate.
 
@@ -41,7 +57,7 @@ Patches are stored in the `vendor` directory. Currently, there's a patch for the
 
 After generating the `BUCK` file, verify that all additional workarounds are still valid. Follow these two steps:
 
-#### Step 1: Verify `./run.sh`
+### Step 1: Verify `./run.sh`
 
 Check that these package versions in `./BUCK` match:
 
@@ -52,7 +68,7 @@ libtugraph-sys==0.1.2+3.5.0
 
 If versions differ, update `./run.sh`.
 
-#### Step 2: Verify `./fixups/**/fixups.toml`
+### Step 2: Verify `./fixups/*/fixups.toml`
 
 Check that these package versions in `./BUCK` match:
 
@@ -63,9 +79,9 @@ openssl-sys==0.9.103
 ring=0.17.8
 ```
 
-If versions differ, update the corresponding `./fixups/**/fixups.toml`.
+If versions differ, update the corresponding `./fixups/<package name>/fixups.toml`.
 
-#### Step 3: Update patches
+### Step 3: Update patches
 
 We currently maintain a patch for the `utoipa-swagger-ui` crate in the `vendor` directory.:
 
