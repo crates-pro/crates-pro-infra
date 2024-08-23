@@ -8,7 +8,7 @@ This folder manages third-party dependencies for the Crates Pro project. We util
 
 To add a new crates.io dependency, open the `Cargo.toml` file in this directory, then add the new dependency as you would in a standard Rust project.
 
-If you encounter a _major version conflict_ with an existing dependency, use the renaming technique. For example, if "clap==4.5" already exists but you need "clap==3.0":
+If you encounter a _major version_ conflict with an existing dependency, use the renaming technique. For example, if "clap==4.5" already exists but you need "clap==3.0":
 
 ```diff
 - clap = "4.5"
@@ -20,7 +20,7 @@ You can then reference "clap==3.0" as `//third-party:clap-3` in your build rules
 
 ### Step 2: Regenerate Build Rules
 
-After adding or modifying dependencies, regenerate the `./BUCK` file to make your changes available, by running the following command:
+After adding or modifying dependencies, regenerate the `./BUCK` file to make your changes available. Run the following command:
 
 ```bash
 ./run.sh
@@ -55,7 +55,7 @@ Patches are stored in the `vendor` directory. Currently, there's a patch for the
 
 ## Maintenance
 
-After generating the `BUCK` file, verify that all additional workarounds are still valid. Follow these two steps:
+After generating the `BUCK` file, verify that all fixups and patches are valid. Follow these two steps:
 
 ### Step 1: Verify `./run.sh`
 

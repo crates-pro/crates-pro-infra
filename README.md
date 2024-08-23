@@ -14,7 +14,7 @@ The goals of `crates-pro/crates-pro-infra` are:
 
 ### Why you need it
 
-We use the "Buck2 build system + NativeLink RE platform" combination to build Crates Pro and its integrated modules. This setup allows developers to build code without manually installing build dependencies or even a Rust toolchain, ensuring consistency with the final deployment environment.
+We use the "Buck2 build system + NativeLink Remote Execution platform" combination to build Crates Pro and its integrated modules. This setup allows developers to build their code without manually installing dependencies or even a Rust toolchain. This setup also ensures build result consistency by using identical dependencies and toolchains across all development environments and the final deployment environment.
 
 ### How to use it
 
