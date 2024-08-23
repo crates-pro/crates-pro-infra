@@ -8,7 +8,7 @@ The goals of `crates-pro/crates-pro-infra` are:
 
 1. **Build Infrastructure**: Provide a unified build system for Crates Pro developers, ensuring consistent build results across all development environments.
 2. **CI Workflow**: Automate testing for pull requests across all Crates Pro repositories, triggered by PRs in the respective repositories.
-3. **CD Workflow**: Automate the deployment process of Crates Pro backend, including rolling updates and rollback capabilities, triggered by merged PRs across all Crates Pro repositories.
+3. **CD Workflow**: Automate the deployment process of Crates Pro backend, including rolling updates and rollback capabilities, triggered by merged PRs into this repository.
 
 ## Build Infrastructure
 
@@ -28,7 +28,7 @@ To start building your code with Buck2, follow the [Buck2 Manual](https://buck2.
 - Edit the `.buckconfig` file in the repository root
 - Replace "action_cache_address", "engine_address" and "cas_address" values with the address of the deployed NativeLink service.
 
-Note: Our NativeLink deployment is currently for insider use only. You may need to deploy your own NativeLink service. Refer to the [Remote Execution](remote_execution/README.md) for deployment instructions.
+Note: Our NativeLink deployment is currently for insider use only. You may need to deploy your own NativeLink service. Refer to the [Remote Execution](remote_execution) for deployment instructions.
 
 **Step 3**: Build your code
 
@@ -36,7 +36,7 @@ You can now build your code with the `buck2` command or by running `./build.sh`.
 
 ### How are third-party dependencies managed
 
-Third-party dependencies are managed in the `third-party` directory. We use `Cargo.toml` to list all required crates.io dependencies and [Reindeer](https://github.com/facebookincubator/reindeer) to generate Buck2 build rules. This allows you to reference dependencies using `//third-party:<package name>` in your build rules. For detailed instructions on adding dependencies and resolving build issues, refer to [Third-party Dependencies](third-party/README.md).
+Third-party dependencies are managed in the `third-party` directory. We use `Cargo.toml` to list all required crates.io dependencies and Reindeer to generate Buck2 build rules. This allows you to reference dependencies using `//third-party:<package name>` in your build rules. For detailed instructions on adding dependencies and resolving build issues, refer to [Third-party Dependencies](third-party).
 
 ## CI/CD Workflow
 

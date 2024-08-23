@@ -50,9 +50,9 @@ To add new build dependencies, toolchains, or pre-download resources for the Cra
 2. Add instructions to set up the required build dependency.
 3. Rebuild the Docker image:
 
-```bash
-docker build -t my-nativelink .
-```
+   ```bash
+   docker build -t my-nativelink .
+   ```
 
 ### Configuring NativeLink
 
@@ -61,7 +61,7 @@ NativeLink uses a JSON configuration file. Currently, we use `./basic_cas.json`,
 - Build action scheduler
 - A single build worker
 - Action cache
-- Content Addressable Storage (CAS)
+- Build artifact storage (CAS)
 
 All these components run within a single container. (We plan to scale the deployment with 20+ workers in separate containers in the future.)
 
