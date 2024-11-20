@@ -1,0 +1,22 @@
+FROM --platform=linux/amd64 almalinux:8.10-20240923
+
+# Install tools and dependencies
+# pip: openssl-devel
+RUN dnf update -y \
+    && dnf group install -y "Development Tools" \
+    && dnf install -y curl openssl-devel
+
+# Install performance-benchmark test/runtime dependencies
+RUN curl -O https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz \
+    && tar -xzf Python-3.11.9.tgz \
+    && cd Python-3.11.9 \
+    && ./configure --enable-optimizations --prefix=/opt \
+    && make -j8 \
+    && make install \
+    && cd .. \
+    && /opt/bin/python3 -m pip install --upgrade pip \
+    && /opt/bin/python3 -m pip install kaleido matplotlib plotly \
+    && rm -rf Python-3.11.9.tgz Python-3.11.9
+RUN ln -s /opt/bin/python3 /usr/local/bin/python
+
+WORKDIR /workdir

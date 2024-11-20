@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-set -e
+set -ex
 
 # Build a target and copy the artifact to a destination
 build_and_copy() {
@@ -9,12 +9,13 @@ build_and_copy() {
     cp "$output" "$dest"
 }
 
-# Cleanup and prepare the destination directories
+# Clean up and prepare the destination directories
 rm -rf build/crates-pro
 mkdir -p build/crates-pro
 
 # crates-pro executables
 build_and_copy "//project/crates-pro:crates_pro" "build/crates-pro/crates_pro"
-
 # crates-pro runtime dependencies
 cp project/crates-pro/.env build/crates-pro
+
+cp images/Dockerfile.crates-pro build

@@ -15,10 +15,15 @@ path = "top/main.rs"
 # List of packages to be imported, with version constraints, features
 # and all options Cargo supports.
 [dependencies]
+actix-multipart = "0.7"
+actix-rt = "2.10"
+actix-web = "4.9"
+async-trait = "0.1"
 anyhow = "1"
 assert_cmd = "2.0.10"
 axum = { version = "0.7.4", features = ["macros"] }
 base64 = "0.22"
+bzip2-sys = { version = "0.1.11+1.0.8", features = ["static"] }
 cargo_metadata = "0.18"
 chrono = "0.4.37"
 clap = { package = "clap", version = "4.5.3", features = ["derive"] }
@@ -29,6 +34,7 @@ dotenvy = "0.15.7"
 env_logger = "0.11"
 filetime = "0.2.14"
 futures = "0.3"
+futures-util = "0.3"
 git2 = "0.19.0"
 hyper = { version = "1.2.0", features = ["full"] }
 jobserver = "0.1.21"
@@ -47,6 +53,7 @@ pretty_env_logger = "0.5"
 rayon = "1.9"
 rdkafka = { version = "0.36.2", features = ["cmake-build"] }
 regex = "1.10.2"
+sanitize-filename = "0.5"
 sea-orm = { version = "0.12.15", features = [
     "sqlx-postgres",
     "runtime-tokio-rustls",
@@ -55,6 +62,7 @@ sea-orm = { version = "0.12.15", features = [
 semver = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
+serial_test = "0.5"
 sqlx = { version = "0.7", features = ["runtime-tokio", "postgres"] }
 ssh2 = "0.9.4"
 structopt = { version = "0.3", default-features = false }
@@ -75,6 +83,7 @@ utoipa-swagger-ui = { path = "vendor/utoipa-swagger-ui-7.1.0-patch1", features =
 ] }
 uuid = { version = "1.8.0", features = ["v4", "fast-rng", "macro-diagnostics"] }
 walkdir = "2.5"
+zip = "2.2.0"
 
 # Local patches - typically git references
 [patch.crates-io]

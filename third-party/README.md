@@ -73,10 +73,12 @@ If versions differ, update `./run.sh`.
 Check that these package versions in `./BUCK` match:
 
 ```
-rdkafka-sys==4.7.0+2.3.0
+bzip2-sys==0.1.11+1.0.8
 libgit2-sys==0.17.0+1.8.1
-openssl-sys==0.9.103
-ring=0.17.8
+openssl-sys==0.9.104
+rdkafka-sys==4.7.0+2.3.0
+ring==0.17.8
+zstd-sys==2.0.13+zstd.1.5.6
 ```
 
 If versions differ, update the corresponding `./fixups/<package name>/fixups.toml`.

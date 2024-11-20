@@ -5,5 +5,8 @@
         "--platform=linux/amd64"
     ],
     "workspaceFolder": "/workdir",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workdir,type=bind"
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workdir,type=bind",
+    "mounts": [
+        "source=/home/rust/crates-pro,target=/workdir/project/crates-pro,type=bind"
+    ]
 }
