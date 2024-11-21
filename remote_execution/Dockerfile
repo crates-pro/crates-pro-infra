@@ -5,7 +5,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --defau
 ENV PATH="/root/.cargo/bin:$PATH"
 
 # Install NativeLink
-RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev ae0c82c0 nativelink
+RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev 481226be nativelink
 
 # Install build dependencies
 # General: clang, lld, libssh2-devel (requires epel-release)

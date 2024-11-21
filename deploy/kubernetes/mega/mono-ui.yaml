@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mono-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mono-ui
+  template:
+    metadata:
+      labels:
+        app: mono-ui
+    spec:
+      containers:
+        - name: mono-ui
+          image: localhost:30500/mono-ui:${MEGA_RANDOM_IMAGE_TAG}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MEGA_INTERNAL_HOST
+              value: http://mono-engine:8000
+            - name: MEGA_HOST
+              value: http://mono.mega.local
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mono-ui
+spec:
+  type: NodePort
+  selector:
+    app: mono-ui
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 32002

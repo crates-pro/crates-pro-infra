@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tugraph
+spec:
+  serviceName: tugraph-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tugraph
+  template:
+    metadata:
+      labels:
+        app: tugraph
+    spec:
+      containers:
+        - name: tugraph
+          image: tugraph/tugraph-runtime-centos7:3.5.0
+          command: ["/bin/sh", "-c"]
+          args:
+            - "lgraph_server --directory /var/lgraph_db --log_dir /var/lgraph_log"
+          ports:
+            - containerPort: 7070
+            - containerPort: 7687
+          volumeMounts:
+            - name: tugraph-storage
+              mountPath: /var/lgraph_db
+              subPath: data
+            - name: tugraph-storage
+              mountPath: /var/lgraph_log
+              subPath: log
+  volumeClaimTemplates:
+    - metadata:
+        name: tugraph-storage
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 50Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tugraph-service
+spec:
+  selector:
+    app: tugraph
+  type: NodePort
+  ports:
+    - name: http
+      port: 7070
+      targetPort: 7070
+      nodePort: 30070
+    - name: bolt
+      port: 7687
+      targetPort: 7687
+      nodePort: 30687
