@@ -30,6 +30,7 @@ clap = { package = "clap", version = "4.5.3", features = ["derive"] }
 clap-3 = { package = "clap", version = "3.0.9", features = ["derive"] }
 crossbeam-utils = "0.8"
 csv = "1.1.0"
+dotenv = "0.15"
 dotenvy = "0.15.7"
 env_logger = "0.11"
 filetime = "0.2.14"
@@ -47,12 +48,14 @@ mockito = "1.0.2"
 nalgebra = "0.32.4"
 neo4rs = "0.7.1"
 once_cell = "1.8.0"
+pgvector = { version = "0.4", features = ["postgres"] }
 plotters = "0.3.5"
 postgres = "0.19.7"
 pretty_env_logger = "0.5"
 rayon = "1.9"
 rdkafka = { version = "0.36.2", features = ["cmake-build"] }
 regex = "1.10.2"
+reqwest = { version = "0.12", features = ["json"] }
 sanitize-filename = "0.5"
 sea-orm = { version = "0.12.15", features = [
     "sqlx-postgres",

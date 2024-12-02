@@ -68,7 +68,7 @@ libtugraph-sys==0.1.2+3.5.0
 
 If versions differ, update `./run.sh`.
 
-### Step 2: Verify `./fixups/*/fixups.toml`
+### Step 2: Verify `./fixups/*/fixups.toml` for package versions
 
 Check that these package versions in `./BUCK` match:
 
@@ -83,7 +83,11 @@ zstd-sys==2.0.13+zstd.1.5.6
 
 If versions differ, update the corresponding `./fixups/<package name>/fixups.toml`.
 
-### Step 3: Update patches
+### Step 3: Verify `./fixups/*/fixups.toml` for system software versions
+
+The fixup file `./fixups/openssl/fixups.toml` relies on the version number of the OpenSSL library installed in the remote execution container. To ensure compatibility, execute `openssl version` command within the remote execution container and verify that the version matches the one specified in the fixup file.
+
+### Step 4: Update patches
 
 We currently maintain a patch for the `utoipa-swagger-ui` crate in the `vendor` directory.:
 
