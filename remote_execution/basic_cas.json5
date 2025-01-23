@@ -5,8 +5,8 @@
         "content_path": "/tmp/nativelink/data-worker-test/content_path-ac",
         "temp_path": "/tmp/nativelink/data-worker-test/tmp_path-ac",
         "eviction_policy": {
-          // 1gb.
-          "max_bytes": 1000000000,
+          // 10 Gb
+          "max_bytes": 10000000000,
         }
       }
     },
@@ -19,8 +19,8 @@
             "content_path": "/tmp/nativelink/data-worker-test/content_path-cas",
             "temp_path": "/tmp/nativelink/data-worker-test/tmp_path-cas",
             "eviction_policy": {
-              // 10gb.
-              "max_bytes": 10000000000,
+              // 50 Gb
+              "max_bytes": 50000000000,
             }
           }
         },
@@ -100,10 +100,12 @@
           "values": ["16"],
         },
         "memory_kb": {
-          "values": ["500000"],
+          // 10 Gb
+          "values": ["10000000"],
         },
         "network_kbps": {
-          "values": ["100000"],
+          // 1000 Mbps
+          "values": ["1000000"],
         },
         "cpu_arch": {
           "values": ["x86_64"],
@@ -182,6 +184,6 @@
     }
   }],
   "global": {
-    "max_open_files": 512
+    "max_open_files": 524288
   }
 }
