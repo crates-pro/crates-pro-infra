@@ -74,9 +74,9 @@ Check that these package versions in `./BUCK` match:
 
 ```
 bzip2-sys==0.1.11+1.0.8
-libgit2-sys==0.17.0+1.8.1
+libgit2-sys==0.18.0+1.9.0
 openssl-sys==0.9.104
-rdkafka-sys==4.7.0+2.3.0
+rdkafka-sys==4.8.0+2.3.0
 ring==0.17.8
 zstd-sys==2.0.13+zstd.1.5.6
 ```
@@ -104,3 +104,17 @@ When updating `utoipa-swagger-ui`:
 1. Update the patch accordingly.
 2. Ensure that the remote builder image downloads the correct version of resources.
 3. Verify that `src/lib.rs` correctly references the pre-downloaded resources.
+
+### Step 5: Verify Component Compilation
+
+Follow these steps to ensure all components compile correctly:
+
+1. Open the 'crates-pro-infra' project in VS Code using the devcontainer
+2. Generate the BUCK file for third-party dependencies, then return to the project root and run the build script:
+
+```bash
+cd third-party/
+./run && ../build.sh
+```
+
+The build script will stop if it encounters any errors. A successful build will display a "done" message at the end. Make sure you see this "done" message before accepting any changes.

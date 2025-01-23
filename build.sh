@@ -1,21 +1,32 @@
 #!/usr/bin/bash
-set -ex
+set -euxo pipefail
 
-# Build a target and copy the artifact to a destination
-build_and_copy() {
-    local target="$1"
-    local dest="$2"
-    local output=$(buck2 build "$target" --show-output | awk '{print $2}')
-    cp "$output" "$dest"
-}
+# 'crates-pro' libs
+buck2 build //project/crates-pro:analysis
+buck2 build //project/crates-pro:data_transporter
+buck2 build //project/crates-pro:model
+buck2 build //project/crates-pro:repo_import
+buck2 build //project/crates-pro:search
+buck2 build //project/crates-pro:tudriver
+# 'crates-pro' bins
+buck2 build //project/crates-pro:crates_pro
+buck2 build //project/crates-pro/tuplugins:plugin1
+buck2 build //project/crates-pro/tuplugins:plugin2
 
-# Clean up and prepare the destination directories
-rm -rf build/crates-pro
-mkdir -p build/crates-pro
+# 'performance-benchmark' libs
+buck2 build //project/performance-benchmark:collector-lib
+# 'performance-benchmark' bins
+buck2 build //project/performance-benchmark:collector
+buck2 build //project/performance-benchmark:flamegraph-fake
+buck2 build //project/performance-benchmark:muti-rustc-perf
+buck2 build //project/performance-benchmark:runtime-fake
+buck2 build //project/performance-benchmark:rustc-fake
+buck2 build //project/performance-benchmark:manager
 
-# crates-pro executables
-build_and_copy "//project/crates-pro:crates_pro" "build/crates-pro/crates_pro"
-# crates-pro runtime dependencies
-cp project/crates-pro/.env build/crates-pro
+# 'sensleak-rs' libs
+buck2 build //project/sensleak-rs:sensleak
+# 'sensleak-rs' bins
+buck2 build //project/sensleak-rs:api
+buck2 build //project/sensleak-rs:scan
 
-cp images/Dockerfile.crates-pro build
+echo 'done'
