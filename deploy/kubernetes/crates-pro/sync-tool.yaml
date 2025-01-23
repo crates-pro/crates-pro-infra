@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sync-tool-deployment
+  namespace: crates-pro
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sync-tool
+  template:
+    metadata:
+      labels:
+        app: sync-tool
+    spec:
+      containers:
+        - name: sync-tool
+          image: localhost:30500/sync-tool:manual-build-2
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: proxy-config
+          command: ["/bin/sh", "-c"]
+          args:
+            - "./sync_tool --workspace /mnt/crates/freighter/crates incremental"
+          volumeMounts:
+            - name: crates-volume
+              mountPath: /mnt/crates
+            - name: freighter-volume
+              mountPath: /home/rust/freighter
+      volumes:
+        - name: crates-volume
+          hostPath:
+            path: /mnt/crates
+        - name: freighter-volume
+          hostPath:
+            path: /home/rust/freighter

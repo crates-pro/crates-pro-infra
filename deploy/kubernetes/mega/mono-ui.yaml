@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: mono-ui
-          image: localhost:30500/mono-ui:${MEGA_RANDOM_IMAGE_TAG}
+          image: localhost:30500/mono-ui:jenkins-build-3
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

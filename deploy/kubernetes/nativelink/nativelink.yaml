@@ -24,8 +24,8 @@ spec:
         app: nativelink
     spec:
       containers:
-        - name: nativelink-worker-buck2
-          image: localhost:30500/nativelink-worker-buck2:481226be
+        - name: nativelink-worker
+          image: localhost:30500/nativelink-worker:20250124.1
           imagePullPolicy: Always
           volumeMounts:
             - name: nativelink-storage

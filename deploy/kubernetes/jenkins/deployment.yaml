@@ -31,15 +31,15 @@ spec:
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
-          image: jenkins/jenkins:2.487-jdk17
+          image: jenkins/jenkins:2.494-jdk17
+          env:
+            - name: JAVA_OPTS
+              value: "-Duser.timezone=Asia/Shanghai -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true"
           ports:
             - name: httpport
               containerPort: 8080
             - name: jnlpport
               containerPort: 50000
-          envFrom:
-            - configMapRef:
-                name: proxy-config
           livenessProbe:
             httpGet:
               path: "/login"
@@ -77,7 +77,14 @@ spec:
   selector:
     app: jenkins-server
   type: NodePort
+  externalTrafficPolicy: Local
   ports:
-    - port: 8080
+    - name: http
+      port: 8080
       targetPort: 8080
       nodePort: 32003
+      protocol: TCP
+    - name: agent
+      port: 50000
+      targetPort: 50000
+      protocol: TCP

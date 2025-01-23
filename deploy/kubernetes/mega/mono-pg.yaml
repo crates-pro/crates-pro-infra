@@ -41,7 +41,7 @@ spec:
     spec:
       containers:
         - name: mono-pg
-          image: localhost:30500/mono-pg:${MEGA_RANDOM_IMAGE_TAG}
+          image: localhost:30500/mono-pg:jenkins-build-3
           imagePullPolicy: Always
           ports:
             - containerPort: 5432

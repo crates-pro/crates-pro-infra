@@ -41,13 +41,13 @@ spec:
     spec:
       containers:
         - name: mono-engine
-          image: localhost:30500/mono-engine:${MEGA_RANDOM_IMAGE_TAG}
+          image: localhost:30500/mono-engine:jenkins-build-3
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
-          envFrom:
-            - configMapRef:
-                name: proxy-config
+          # envFrom:
+          #   - configMapRef:
+          #       name: proxy-config
           volumeMounts:
             - name: mono-engine-data
               mountPath: /opt/mega
