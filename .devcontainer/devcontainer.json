@@ -1,12 +1,32 @@
 {
-    "name": "crates-pro-infra",
-    "dockerFile": "../Dockerfile",
-    "runArgs": [
-        "--platform=linux/amd64"
-    ],
-    "workspaceFolder": "/workdir",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workdir,type=bind",
+    "name": "Crates Pro Infrastructure",
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "args": {
+            "USERNAME": "rust", // Used for creating "/home/$USERNAME" directory within container
+            "USER_UID": "1000",
+            "DOCKER_GID": "991" // Retrieved by running `stat -c '%g' /var/run/docker.sock` on host machine
+        }
+    },
+    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
     "mounts": [
-        "source=/home/rust/crates-pro,target=/workdir/project/crates-pro,type=bind"
-    ]
+        "source=/home/rust/crates-pro-copy,target=/workspace/project/crates-pro,readonly,type=bind",
+        // Add mounts for Docker and kubectl
+        "source=/home/rust/.docker/config.json,target=/tmp/docker-config.json,readonly,type=bind",
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+        "source=${localEnv:HOME}/.kube,target=/home/${localEnv:USER}/.kube,type=bind"
+    ],
+    "remoteUser": "rust",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "mrmlnc.vscode-json5",
+                "ms-azuretools.vscode-docker",
+                "tamasfe.even-better-toml"
+            ]
+        }
+    },
+    // Copy host docker config to dev container
+    "postCreateCommand": "cp /tmp/docker-config.json ~/.docker/config.json"
 }
