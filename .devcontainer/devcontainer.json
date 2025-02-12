@@ -11,6 +11,8 @@
     "workspaceFolder": "/workspace",
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
     "mounts": [
+        // Mount current development version of crates-pro
+        "source=/home/rust/crates-pro,target=/workspace/project/crates-pro,type=bind",
         // Add mounts for Docker and kubectl
         "source=/home/rust/.docker/config.json,target=/tmp/docker-config.json,readonly,type=bind",
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",

@@ -19,10 +19,24 @@ use zip::{result::ZipError, ZipArchive};
 /// + absolute path to a folder containing files to overwrite the default swagger-ui files
 
 const SWAGGER_UI_DOWNLOAD_URL_DEFAULT: &str =
-    "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.12.zip";
+    "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip";
 
 const SWAGGER_UI_DOWNLOAD_URL: &str = "SWAGGER_UI_DOWNLOAD_URL";
 const SWAGGER_UI_OVERWRITE_FOLDER: &str = "SWAGGER_UI_OVERWRITE_FOLDER";
+
+#[cfg(feature = "cache")]
+fn sha256(data: &[u8]) -> String {
+    use sha2::{Digest, Sha256};
+    let mut hasher = Sha256::new();
+    hasher.update(data);
+    let hash = hasher.finalize();
+    format!("{:x}", hash).to_uppercase()
+}
+
+#[cfg(feature = "cache")]
+fn get_cache_dir() -> Option<PathBuf> {
+    dirs::cache_dir().map(|p| p.join("utoipa-swagger-ui"))
+}
 
 fn main() {
     let target_dir = env::var("OUT_DIR").unwrap();
@@ -137,7 +151,8 @@ impl SwaggerZip {
 
 fn get_zip_archive(url: &str, target_dir: &str) -> SwaggerZip {
     let zip_filename = url.split('/').last().unwrap().to_string();
-    let zip_path = [target_dir, &zip_filename].iter().collect::<PathBuf>();
+    #[allow(unused_mut)]
+    let mut zip_path = [target_dir, &zip_filename].iter().collect::<PathBuf>();
 
     if env::var("CARGO_FEATURE_VENDORED").is_ok() {
         #[cfg(not(feature = "vendored"))]
@@ -173,14 +188,37 @@ fn get_zip_archive(url: &str, target_dir: &str) -> SwaggerZip {
             .expect("failed to open file protocol copied Swagger UI");
         SwaggerZip::File(zip)
     } else if url.starts_with("http://") || url.starts_with("https://") {
-        println!("start download to : {:?}", zip_path);
-
         // with http protocol we update when the 'SWAGGER_UI_DOWNLOAD_URL' changes
         println!("cargo:rerun-if-env-changed={SWAGGER_UI_DOWNLOAD_URL}");
 
-        download_file(url, zip_path.clone()).unwrap();
-        let swagger_ui_zip =
-            File::open([target_dir, &zip_filename].iter().collect::<PathBuf>()).unwrap();
+        // Update zip_path to point to the resolved cache directory
+        #[cfg(feature = "cache")]
+        {
+            // Compute cache key based hashed URL + crate version
+            let mut cache_key = String::new();
+            cache_key.push_str(url);
+            cache_key.push_str(&env::var("CARGO_PKG_VERSION").unwrap_or_default());
+            let cache_key = sha256(cache_key.as_bytes());
+            // Store the cache in the cache_key directory inside the OS's default cache folder
+            let mut cache_dir = if let Some(dir) = get_cache_dir() {
+                dir.join("swagger-ui").join(&cache_key)
+            } else {
+                println!("cargo:warning=Could not determine cache directory, using OUT_DIR");
+                PathBuf::from(env::var("OUT_DIR").unwrap())
+            };
+            if fs::create_dir_all(&cache_dir).is_err() {
+                cache_dir = env::var("OUT_DIR").unwrap().into();
+            }
+            zip_path = cache_dir.join(&zip_filename);
+        }
+
+        if zip_path.exists() {
+            println!("using cached zip path from : {:?}", zip_path);
+        } else {
+            println!("start download to : {:?}", zip_path);
+            download_file(url, zip_path.clone()).expect("failed to download Swagger UI");
+        }
+        let swagger_ui_zip = File::open(zip_path).unwrap();
         let zip = ZipArchive::new(swagger_ui_zip).expect("failed to open downloaded Swagger UI");
         SwaggerZip::File(zip)
     } else {
@@ -225,15 +263,9 @@ struct SwaggerUiDist;
 fn download_file(url: &str, path: PathBuf) -> Result<(), Box<dyn Error>> {
     let reqwest_feature = env::var("CARGO_FEATURE_REQWEST");
     println!("reqwest feature: {reqwest_feature:?}");
-    if reqwest_feature.is_ok()
-        || env::var("CARGO_CFG_TARGET_OS")
-            .map(|os| os == "windows")
-            .unwrap_or_default()
-    {
-        #[cfg(any(feature = "reqwest", target_os = "windows"))]
-        {
-            download_file_reqwest(url, path)?;
-        }
+    if reqwest_feature.is_ok() {
+        #[cfg(feature = "reqwest")]
+        download_file_reqwest(url, path)?;
         Ok(())
     } else {
         println!("trying to download using `curl` system package");
@@ -241,7 +273,7 @@ fn download_file(url: &str, path: PathBuf) -> Result<(), Box<dyn Error>> {
     }
 }
 
-#[cfg(any(feature = "reqwest", target_os = "windows"))]
+#[cfg(feature = "reqwest")]
 fn download_file_reqwest(url: &str, path: PathBuf) -> Result<(), Box<dyn Error>> {
     let mut client_builder = reqwest::blocking::Client::builder();
 
@@ -262,7 +294,7 @@ fn download_file_reqwest(url: &str, path: PathBuf) -> Result<(), Box<dyn Error>>
     Ok(())
 }
 
-#[cfg(any(feature = "reqwest", target_os = "windows"))]
+#[cfg(feature = "reqwest")]
 fn parse_ca_file(path: &str) -> Result<reqwest::Certificate, Box<dyn Error>> {
     let mut buf = Vec::new();
     use io::Read;
@@ -272,6 +304,16 @@ fn parse_ca_file(path: &str) -> Result<reqwest::Certificate, Box<dyn Error>> {
 }
 
 fn download_file_curl<T: AsRef<Path>>(url: &str, target_dir: T) -> Result<(), Box<dyn Error>> {
+    // Not using `CARGO_CFG_TARGET_OS` because of the possibility of cross-compilation.
+    // When targeting `x86_64-pc-windows-gnu` on Linux for example, `cfg!()` in the
+    // build script still reports `target_os = "linux"`, which is desirable.
+    let curl_bin_name = if cfg!(target_os = "windows") {
+        // powershell aliases `curl` to `Invoke-WebRequest`
+        "curl.exe"
+    } else {
+        "curl"
+    };
+
     #[cfg(feature = "url")]
     let url = url::Url::parse(url)?;
 
@@ -296,7 +338,7 @@ fn download_file_curl<T: AsRef<Path>>(url: &str, target_dir: T) -> Result<(), Bo
         args.extend(["--cacert", &cacert]);
     }
 
-    let download = std::process::Command::new("curl")
+    let download = std::process::Command::new(curl_bin_name)
         .args(args)
         .spawn()
         .and_then(|mut child| child.wait());
@@ -312,6 +354,13 @@ fn download_file_curl<T: AsRef<Path>>(url: &str, target_dir: T) -> Result<(), Bo
                 ))
             }
         })
+        .map_err(|error| {
+            if error.kind() == io::ErrorKind::NotFound {
+                io::Error::new(error.kind(), format!("`{curl_bin_name}` command not found"))
+            } else {
+                error
+            }
+        })
         .map_err(Box::new)?)
 }
 
@@ -319,7 +368,7 @@ fn overwrite_target_file(target_dir: &str, swagger_ui_dist_zip: &str, path_in: P
     let filename = path_in.file_name().unwrap().to_str().unwrap();
     println!("overwrite file: {:?}", path_in.file_name().unwrap());
 
-    let content = fs::read_to_string(path_in.clone());
+    let content = fs::read(path_in.clone());
 
     match content {
         Ok(content) => {

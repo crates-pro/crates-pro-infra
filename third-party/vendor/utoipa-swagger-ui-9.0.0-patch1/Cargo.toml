@@ -13,8 +13,14 @@
 edition = "2021"
 rust-version = "1.75"
 name = "utoipa-swagger-ui"
-version = "7.1.0"
+version = "9.0.0"
 authors = ["Juha Kukkonen <juha7kukkonen@gmail.com>"]
+build = "build.rs"
+autolib = false
+autobins = false
+autoexamples = false
+autotests = false
+autobenches = false
 description = "Swagger UI for utoipa"
 readme = "README.md"
 keywords = [
@@ -32,6 +38,7 @@ features = [
     "axum",
     "rocket",
     "vendored",
+    "cache",
 ]
 no-default-features = true
 rustdoc-args = [
@@ -39,16 +46,24 @@ rustdoc-args = [
     "doc_cfg",
 ]
 
+[lib]
+name = "utoipa_swagger_ui"
+path = "src/lib.rs"
+
 [dependencies.actix-web]
 version = "4"
+features = ["macros"]
 optional = true
 default-features = false
 
 [dependencies.axum]
-version = "0.7"
+version = "0.8.0"
 features = ["json"]
 optional = true
 default-features = false
+
+[dependencies.base64]
+version = "0.22.1"
 
 [dependencies.mime_guess]
 version = "2.0"
@@ -69,10 +84,26 @@ features = ["derive"]
 version = "1.0"
 
 [dependencies.utoipa]
-version = "4"
+version = "5.0.0"
+features = ["macros"]
+default-features = false
+
+[dev-dependencies.http]
+version = "1.2"
 
 [dev-dependencies.similar]
 version = "2.5"
+
+[dev-dependencies.tokio]
+version = "1"
+features = ["macros"]
+
+[dev-dependencies.tower]
+version = "0.5"
+
+[build-dependencies.dirs]
+version = "5.0.1"
+optional = true
 
 [build-dependencies.regex]
 version = "1.7"
@@ -86,8 +117,12 @@ features = [
 optional = true
 default-features = false
 
+[build-dependencies.sha2]
+version = "0.10.8"
+optional = true
+
 [build-dependencies.url]
-version = "2.5"
+version = "2"
 optional = true
 
 [build-dependencies.utoipa-swagger-ui-vendored]
@@ -95,11 +130,15 @@ version = "0.1"
 optional = true
 
 [build-dependencies.zip]
-version = "1"
+version = "2"
 features = ["deflate"]
 default-features = false
 
 [features]
+cache = [
+    "dep:dirs",
+    "dep:sha2",
+]
 debug = []
 debug-embed = ["rust-embed/debug-embed"]
 default = ["url"]
@@ -107,14 +146,7 @@ reqwest = ["dep:reqwest"]
 url = ["dep:url"]
 vendored = ["dep:utoipa-swagger-ui-vendored"]
 
-[target."cfg(windows)".build-dependencies.reqwest]
-version = "0.12"
-features = [
-    "blocking",
-    "rustls-tls",
-]
-default-features = false
-
-[target."cfg(windows)".build-dependencies.utoipa-swagger-ui-vendored]
-version = "0.1"
-optional = true
+[lints.rust.unexpected_cfgs]
+level = "warn"
+priority = 0
+check-cfg = ["cfg(doc_cfg)"]

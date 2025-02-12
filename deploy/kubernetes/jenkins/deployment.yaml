@@ -31,7 +31,7 @@ spec:
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
-          image: jenkins/jenkins:2.494-jdk17
+          image: jenkins/jenkins:2.497-jdk17
           env:
             - name: JAVA_OPTS
               value: "-Duser.timezone=Asia/Shanghai -Dhudson.security.csrf.GlobalCrumbIssuerConfiguration.DISABLE_CSRF_PROTECTION=true"

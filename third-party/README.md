@@ -91,7 +91,7 @@ The fixup file `./fixups/openssl/fixups.toml` relies on the version number of th
 
 We currently maintain a patch for the `utoipa-swagger-ui` crate in the `vendor` directory.:
 
-Patch location: `vendor/utoipa-swagger-ui-7.1.0-patch1`
+Patch location: `vendor/utoipa-swagger-ui-9.0.0-patch1`
 
 How the patch works:
 
@@ -114,7 +114,7 @@ Follow these steps to ensure all components compile correctly:
 
 ```bash
 cd third-party/
-./run && ../build.sh
+./run.sh && ../build.sh
 ```
 
 The build script will stop if it encounters any errors. A successful build will display a "done" message at the end. Make sure you see this "done" message before accepting any changes.

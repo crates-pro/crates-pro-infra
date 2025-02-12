@@ -5,7 +5,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --defau
 ENV PATH="/root/.cargo/bin:$PATH"
 
 # Install NativeLink
-RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev 4772bd4d nativelink
+RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev 7afe2868 nativelink
 
 # Install build dependencies
 # General: clang, lld, libssh2-devel (requires epel-release)
@@ -26,10 +26,10 @@ RUN yum install -y epel-release \
 
 WORKDIR /workdir
 
-# Download resources required by `//third-party/vendor/utoipa-swagger-ui-7.1.0-patch1/src/lib.rs`
-RUN curl -L -o swagger-ui-5.17.12.zip https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.12.zip \
-    && unzip -j swagger-ui-5.17.12.zip "swagger-ui-5.17.12/dist/*" -d ./swagger-ui-5.17.12-dist \
-    && rm -f swagger-ui-5.17.12.zip
+# Download resources required by `//third-party/vendor/utoipa-swagger-ui-9.0.0-patch1/src/lib.rs`
+RUN curl -L -o swagger-ui-5.17.14.zip https://github.com/swagger-api/swagger-ui/archive/refs/tags/v5.17.14.zip \
+    && unzip -j swagger-ui-5.17.14.zip "swagger-ui-5.17.14/dist/*" -d ./swagger-ui-5.17.14-dist \
+    && rm -f swagger-ui-5.17.14.zip
 
 COPY basic_cas.json5 .
 CMD ["nativelink", "./basic_cas.json5"]
