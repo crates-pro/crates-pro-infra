@@ -1,11 +1,11 @@
-FROM tugraph/tugraph-compile-centos8:1.3.4
+FROM tugraph/tugraph-compile-centos8:1.3.5
 
-# Install Rust with nightly-2024-11-23 toolchain (as in NativeLink `MODULE.bazel`)
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2024-11-23 -y
+# Install Rust with nightly-2025-01-15 toolchain (as in NativeLink `MODULE.bazel`)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2025-01-15 -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
 # Install NativeLink
-RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev 7afe2868 nativelink
+RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev 07bd27a nativelink
 
 # Install build dependencies
 # General: clang, lld, libssh2-devel (requires epel-release)

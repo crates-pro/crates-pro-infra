@@ -7,6 +7,3 @@
 [submodule "sensleak-rs"]
 	path = project/sensleak-rs
 	url = https://github.com/crates-pro/sensleak-rs
-[submodule "prelude"]
-	path = prelude
-	url = https://github.com/facebook/buck2-prelude

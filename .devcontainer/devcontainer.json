@@ -22,6 +22,7 @@
     "customizations": {
         "vscode": {
             "extensions": [
+                "fill-labs.dependi",
                 "mrmlnc.vscode-json5",
                 "ms-azuretools.vscode-docker",
                 "tamasfe.even-better-toml"

@@ -4,6 +4,9 @@
   toolchains = toolchains
   none = none
 
+[external_cells]
+  prelude = bundled
+
 [cell_aliases]
   config = prelude
   ovr_config = prelude
