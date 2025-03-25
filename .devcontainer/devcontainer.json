@@ -25,6 +25,7 @@
                 "fill-labs.dependi",
                 "mrmlnc.vscode-json5",
                 "ms-azuretools.vscode-docker",
+                "saoudrizwan.claude-dev",
                 "tamasfe.even-better-toml"
             ]
         }

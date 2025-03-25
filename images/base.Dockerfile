@@ -1,4 +1,4 @@
-FROM almalinux:8.10-20240923
+FROM almalinux:8.10-20250307
 
 # Install tools and dependencies
 # Reindeer: openssl-devel
@@ -6,19 +6,18 @@ RUN dnf update -y \
     && dnf group install -y "Development Tools" \
     && dnf install -y curl openssl-devel
 
-# Install Rust with nightly-2024-10-13 toolchain (required by Buck2)
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2024-10-13 -y
+# Install Rust with nightly-2024-11-22 toolchain (required by Buck2)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2024-11-22 -y
 ENV PATH="/root/.cargo/bin:$PATH"
 
 # Install Buck2 and Reindeer
-RUN cargo install --git https://github.com/facebook/buck2.git --rev 7dd41c5a buck2
-RUN cargo install --git https://github.com/facebookincubator/reindeer.git --rev ebd86555 reindeer
+RUN cargo install --git https://github.com/yxdai-nju/buck2.git --rev 4813980 buck2
+RUN cargo install --git https://github.com/facebookincubator/reindeer.git --rev a81ef2c reindeer
 
 WORKDIR /workdir
 
 ##### Copy all Buck2-required files except for 'project'
 COPY platforms ./platforms
-COPY prelude ./prelude
 COPY toolchains ./toolchains
 COPY .buckconfig ./.buckconfig
 COPY .buckroot ./.buckroot
