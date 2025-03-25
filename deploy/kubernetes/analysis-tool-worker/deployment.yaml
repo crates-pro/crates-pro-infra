@@ -1,23 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sensleak-worker
+  name: analysis-tool-worker
+  namespace: analysis-tool-worker
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sensleak-worker
+      app: analysis-tool-worker
   template:
     metadata:
       labels:
-        app: sensleak-worker
+        app: analysis-tool-worker
     spec:
       containers:
-        - name: sensleak-worker
-          image: localhost:30500/sensleak-worker:local-20250325-1207
+        - name: container-0
+          image: localhost:30500/analysis-tool-worker:local-20250325-2107
           env:
             - name: KAFKA_CONSUMER_GROUP_ID
-              value: sensleak-worker-1-group
+              value: analysis-tool-worker-1-group
             - name: POSTGRES_HOST_IP
               value: postgresql-test1.postgresql.svc.cluster.local
             - name: POSTGRES_HOST_PORT
