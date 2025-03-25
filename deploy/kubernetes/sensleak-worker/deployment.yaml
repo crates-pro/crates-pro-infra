@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensleak-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sensleak-worker
+  template:
+    metadata:
+      labels:
+        app: sensleak-worker
+    spec:
+      containers:
+        - name: sensleak-worker
+          image: localhost:30500/sensleak-worker:local-20250325-1207
+          env:
+            - name: KAFKA_CONSUMER_GROUP_ID
+              value: sensleak-worker-1-group
+            - name: POSTGRES_HOST_IP
+              value: postgresql-test1.postgresql.svc.cluster.local
+            - name: POSTGRES_HOST_PORT
+              value: "5432"
+            - name: TUGRAPH_BOLT_URL
+              value: bolt://tugraph-test1.tugraph.svc.cluster.local:7687
+          volumeMounts:
+            - name: crates-volume
+              mountPath: /var/crates
+      volumes:
+        - name: crates-volume
+          hostPath:
+            path: /mnt/crates/freighter/crates
+            type: Directory
