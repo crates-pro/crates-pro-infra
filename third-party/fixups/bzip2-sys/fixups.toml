@@ -4,5 +4,5 @@ rustc_flags = [
 ]
 
 [[buildscript]]
-[buildscript.gen_srcs]
-env = { OPT_LEVEL = "3" }
+[buildscript.gen_srcs.env]
+OPT_LEVEL = "3"

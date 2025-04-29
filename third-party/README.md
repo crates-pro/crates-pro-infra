@@ -63,7 +63,6 @@ Check that these package versions in `./BUCK` match:
 
 ```
 mime_guess==2.0.x
-libtugraph-sys==0.1.2+3.5.0
 ```
 
 If versions differ, update `./run.sh`.
@@ -74,11 +73,12 @@ Check that these package versions in `./BUCK` match:
 
 ```
 bzip2-sys==0.1.13+1.0.8
-libgit2-sys==0.18.0+1.9.0
+libgit2-sys==0.18.1+1.9.0
+libssh2-sys==0.3.1
 lzma-sys==0.1.20
 rdkafka-sys==4.8.0+2.3.0
-ring==0.17.8
-zstd-sys==2.0.13+zstd.1.5.6
+ring==0.17.14
+zstd-sys==2.0.15+zstd.1.5.7
 ```
 
 If versions differ, update the corresponding `./fixups/<package name>/fixups.toml`.
@@ -91,7 +91,7 @@ The fixup file `./fixups/openssl/fixups.toml` relies on the version number of th
 
 We currently maintain a patch for the `utoipa-swagger-ui` crate in the `vendor` directory.:
 
-Patch location: `vendor/utoipa-swagger-ui-9.0.0-patch1`
+Patch location: `vendor/utoipa-swagger-ui-9.0.1-patch1`
 
 How the patch works:
 

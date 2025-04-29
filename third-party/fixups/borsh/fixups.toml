@@ -1,2 +1,5 @@
 cargo_env = true
-env = { CARGO = "/root/.cargo/bin/cargo" }
+
+[env]
+CARGO = "/home/rust/.cargo/bin/cargo"
+

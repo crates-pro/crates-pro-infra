@@ -10,8 +10,6 @@ buck2 build //project/crates-pro:search
 buck2 build //project/crates-pro:tudriver
 # 'crates-pro' bins
 buck2 build //project/crates-pro:crates_pro
-buck2 build //project/crates-pro/tuplugins:plugin1
-buck2 build //project/crates-pro/tuplugins:plugin2
 
 # 'performance-benchmark' libs
 buck2 build //project/performance-benchmark:collector-lib

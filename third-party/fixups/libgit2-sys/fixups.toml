@@ -1,8 +1,7 @@
 rustc_flags = [
-    "-Lnative=$(location :libgit2-sys-0.18.0+1.9.0-build-script-run[out_dir])/build",
-    "-lstatic=git2",
+    "-lgit2",
 ]
 
 [[buildscript]]
-[buildscript.gen_srcs]
-env = { OPT_LEVEL = "3" }
+[buildscript.rustc_flags.env]
+LIBGIT2_NO_VENDOR = "1"

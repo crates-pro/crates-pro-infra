@@ -1,8 +1,6 @@
 rustc_flags = [
-    "-Lnative=$(location :lzma-sys-0.1.20-build-script-run[out_dir])",
-    "-lstatic=lzma",
+    "-llzma",
 ]
 
 [[buildscript]]
-[buildscript.gen_srcs]
-env = { OPT_LEVEL = "3" }
+[buildscript.rustc_flags]

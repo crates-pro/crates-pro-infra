@@ -3,8 +3,11 @@ cargo_env = true
 rustc_flags = [
     "-Lnative=$(location //third-party:rdkafka-sys-4.8.0+2.3.0-build-script-run[out_dir])/lib",
     "-lstatic=rdkafka",
+    "-lz",
 ]
 
 [[buildscript]]
-[buildscript.gen_srcs]
-env = { PROFILE = "release", OPT_LEVEL = "3", DEBUG = "false" }
+[buildscript.gen_srcs.env]
+PROFILE = "release"
+OPT_LEVEL = "3"
+DEBUG = "false"
