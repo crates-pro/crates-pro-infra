@@ -1,67 +1,65 @@
 {
-  "stores": {
-    "AC_MAIN_STORE": {
-      "filesystem": {
-        "content_path": "/tmp/nativelink/data-worker-test/content_path-ac",
-        "temp_path": "/tmp/nativelink/data-worker-test/tmp_path-ac",
-        "eviction_policy": {
-          // 10 Gb
-          "max_bytes": 10000000000,
-        }
+  "stores": [{
+    "name": "AC_MAIN_STORE",
+    "filesystem": {
+      "content_path": "/tmp/nativelink/data-worker-test/content_path-ac",
+      "temp_path": "/tmp/nativelink/data-worker-test/tmp_path-ac",
+      "eviction_policy": {
+        // 10 Gb
+        "max_bytes": 10000000000,
       }
-    },
-    "WORKER_FAST_SLOW_STORE": {
-      "fast_slow": {
-        // "fast" must be a "filesystem" store because the worker uses it to make
-        // hardlinks on disk to a directory where the jobs are running.
-        "fast": {
-          "filesystem": {
-            "content_path": "/tmp/nativelink/data-worker-test/content_path-cas",
-            "temp_path": "/tmp/nativelink/data-worker-test/tmp_path-cas",
-            "eviction_policy": {
-              // 50 Gb
-              "max_bytes": 50000000000,
-            }
+    }
+  }, {
+    "name": "WORKER_FAST_SLOW_STORE",
+    "fast_slow": {
+      // "fast" must be a "filesystem" store because the worker uses it to make
+      // hardlinks on disk to a directory where the jobs are running.
+      "fast": {
+        "filesystem": {
+          "content_path": "/tmp/nativelink/data-worker-test/content_path-cas",
+          "temp_path": "/tmp/nativelink/data-worker-test/tmp_path-cas",
+          "eviction_policy": {
+            // 50 Gb
+            "max_bytes": 50000000000,
           }
-        },
-        "slow": {
-          /// Discard data.
-          /// This example usage has the CAS and the Worker live in the same place,
-          /// so they share the same underlying CAS. Since workers require a fast_slow
-          /// store, we use the fast store as our primary data store, and the slow store
-          /// is just a noop, since there's no shared storage in this config.
-          "noop": {}
         }
+      },
+      "slow": {
+        /// Discard data.
+        /// This example usage has the CAS and the Worker live in the same place,
+        /// so they share the same underlying CAS. Since workers require a fast_slow
+        /// store, we use the fast store as our primary data store, and the slow store
+        /// is just a noop, since there's no shared storage in this config.
+        "noop": {}
       }
     }
-  },
-  "schedulers": {
-    "MAIN_SCHEDULER": {
-      "simple": {
-        "supported_platform_properties": {
-          "cpu_count": "minimum",
-          "memory_kb": "minimum",
-          "network_kbps": "minimum",
-          "disk_read_iops": "minimum",
-          "disk_read_bps": "minimum",
-          "disk_write_iops": "minimum",
-          "disk_write_bps": "minimum",
-          "shm_size": "minimum",
-          "gpu_count": "minimum",
-          "gpu_model": "exact",
-          "cpu_vendor": "exact",
-          "cpu_arch": "exact",
-          "cpu_model": "exact",
-          "kernel_version": "exact",
-          "OSFamily": "priority",
-          "container-image": "priority",
-          // Example of how to set which docker images are available and set
-          // them in the platform properties.
-          // "docker_image": "priority",
-        }
+  }],
+  "schedulers": [{
+    "name": "MAIN_SCHEDULER",
+    "simple": {
+      "supported_platform_properties": {
+        "cpu_count": "minimum",
+        "memory_kb": "minimum",
+        "network_kbps": "minimum",
+        "disk_read_iops": "minimum",
+        "disk_read_bps": "minimum",
+        "disk_write_iops": "minimum",
+        "disk_write_bps": "minimum",
+        "shm_size": "minimum",
+        "gpu_count": "minimum",
+        "gpu_model": "exact",
+        "cpu_vendor": "exact",
+        "cpu_arch": "exact",
+        "cpu_model": "exact",
+        "kernel_version": "exact",
+        "OSFamily": "priority",
+        "container-image": "priority",
+        // Example of how to set which docker images are available and set
+        // them in the platform properties.
+        // "docker_image": "priority",
       }
     }
-  },
+  }],
   "workers": [{
     "local": {
       "worker_api_endpoint": {
@@ -76,23 +74,8 @@
         "PATH": {
           "value": "${PATH:-}",
         },
-        "HTTP_PROXY": {
-          "value": "${HTTP_PROXY:-}",
-        },
-        "HTTPS_PROXY": {
-          "value": "${HTTPS_PROXY:-}",
-        },
-        "NO_PROXY": {
-          "value": "${NO_PROXY:-}",
-        },
-        "http_proxy": {
-          "value": "${http_proxy:-}",
-        },
-        "https_proxy": {
-          "value": "${https_proxy:-}",
-        },
-        "no_proxy": {
-          "value": "${no_proxy:-}",
+        "PKG_CONFIG_PATH": {
+          "value": "${PKG_CONFIG_PATH:-}",
         },
       },
       "platform_properties": {
@@ -169,9 +152,6 @@
       }
     },
     "services": {
-      "experimental_prometheus": {
-        "path": "/metrics"
-      },
       // Note: This should be served on a different port, because it has
       // a different permission set than the other services.
       // In other words, this service is a backend api. The ones above

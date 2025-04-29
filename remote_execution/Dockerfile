@@ -1,28 +1,75 @@
-FROM tugraph/tugraph-compile-centos8:1.3.5
+FROM almalinux:9.5-20250411
 
-# Install Rust with nightly-2025-01-15 toolchain (as in NativeLink `MODULE.bazel`)
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2025-01-15 -y
-ENV PATH="/root/.cargo/bin:$PATH"
-
-# Install NativeLink
-RUN cargo install --git https://github.com/TraceMachina/nativelink.git --rev 07bd27a nativelink
+ARG NPROC=8
 
 # Install build dependencies
-# General: clang, lld, libssh2-devel (requires epel-release)
-# crates-pro: Python 3.8.20 and pip packages
-# performance-benchmark: fontconfig-devel
-RUN curl -O https://www.python.org/ftp/python/3.8.20/Python-3.8.20.tgz \
-    && tar -xzf Python-3.8.20.tgz \
-    && cd Python-3.8.20 \
-    && ./configure --enable-optimizations --prefix=/usr/local \
-    && make -j8 \
+# cc (crates.io): clang
+# cmake (crates.io): cmake
+# OpenSSL 3.2.2 (Dockerfile): perl-FindBin, perl-IPC-Cmd, perl-Pod-Html
+RUN dnf update -y \
+    && dnf group install -y "Development Tools" \
+    && dnf install -y clang cmake perl-FindBin perl-IPC-Cmd perl-Pod-Html
+
+# Install OpenSSL 3.2.2 from source
+# Required by: openssl-sys (crates.io), libssh2-sys (crates.io), libgit2 1.9.0 (Dockerfile)
+# enable-sm4: openssl (crates.io)
+WORKDIR /tmp
+RUN curl -LO https://www.openssl.org/source/openssl-3.2.2.tar.gz \
+    && tar -xzf openssl-3.2.2.tar.gz \
+    && cd openssl-3.2.2 \
+    && ./config --prefix=/usr/local/ssl --openssldir=/usr/local/ssl shared enable-sm4 \
+    && make -j$(NPROC) \
     && make install \
-    && cd .. \
-    && python3 -m pip install --upgrade pip \
-    && python3 -m pip install nest_asyncio pexpect requests pytest httpx cython==3.0.10 sphinx myst_parser sphinx_panels sphinx_rtd_theme numpy==1.19.5 torch==1.10.2 dgl==1.0.4 ogb pandas==0.25.3 \
-    && rm -rf Python-3.8.20.tgz Python-3.8.20
-RUN yum install -y epel-release \
-    && yum install -y clang lld fontconfig-devel libssh2-devel
+    && echo "/usr/local/ssl/lib64" > /etc/ld.so.conf.d/openssl.conf \
+    && ldconfig \
+    && ln -sf /usr/local/ssl/bin/openssl /usr/bin/openssl
+
+# Set OpenSSL environment variables
+ENV PATH="/usr/local/ssl/bin:$PATH" \
+    OPENSSL_DIR="/usr/local/ssl"
+
+# Install libgit2 1.9.0 from source
+# Required by: libgit2-sys (crates.io)
+WORKDIR /tmp
+RUN curl -LO https://github.com/libgit2/libgit2/archive/refs/tags/v1.9.0.tar.gz \
+    && tar -xzf v1.9.0.tar.gz \
+    && cd libgit2-1.9.0 \
+    && mkdir build && cd build \
+    && cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local \
+                -DOPENSSL_ROOT_DIR=/usr/local/ssl \
+                -DBUILD_SHARED_LIBS=ON \
+    && make -j$(NPROC) \
+    && make install \
+    && ldconfig
+
+# Set libgit2 environment variables
+ENV PATH="/usr/local/bin:$PATH"
+
+# Set library environment variables
+ENV LD_LIBRARY_PATH="/usr/local/ssl/lib64:/usr/local/lib64:/usr/lib64" \
+    PKG_CONFIG_PATH="/usr/local/ssl/lib64/pkgconfig:/usr/local/lib64/pkgconfig:/usr/lib64/pkgconfig"
+
+# Create and switch to user
+ARG USERNAME="rust"
+ARG USER_UID="1000"
+RUN useradd -m -s /bin/bash -u $USER_UID $USERNAME \
+    && mkdir -p /etc/sudoers.d \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+USER $USERNAME
+
+# Install Rust with nightly-2025-04-03 toolchain (as in NativeLink `MODULE.bazel`)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2025-04-03 -y
+ENV PATH="/home/$USERNAME/.cargo/bin:$PATH"
+
+# Install NativeLink
+RUN cargo +nightly-2025-04-03 install --git https://github.com/TraceMachina/nativelink.git --rev 9798a0d nativelink
+
+# Create and set permissions for directories
+USER root
+RUN mkdir -p /workdir && chown $USERNAME:$USERNAME /workdir
+RUN mkdir -p /tmp/nativelink && chown $USERNAME:$USERNAME /tmp/nativelink
+USER $USERNAME
 
 WORKDIR /workdir
 
