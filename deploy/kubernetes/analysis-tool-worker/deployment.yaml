@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: container-0
-          image: localhost:30500/analysis-tool-worker:local-20250325-2107
+          image: localhost:30500/analysis-tool-worker:local-20250326-1313
           env:
             - name: KAFKA_CONSUMER_GROUP_ID
               value: analysis-tool-worker-1-group
@@ -26,10 +26,10 @@ spec:
             - name: TUGRAPH_BOLT_URL
               value: bolt://tugraph-test1.tugraph.svc.cluster.local:7687
           volumeMounts:
-            - name: crates-volume
-              mountPath: /var/crates
+            - name: target-volume
+              mountPath: /var/target
       volumes:
-        - name: crates-volume
+        - name: target-volume
           hostPath:
-            path: /mnt/crates/freighter/crates
+            path: /mnt/devops/instances/test1/cratespro-backend/output
             type: Directory
