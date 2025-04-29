@@ -1,9 +1,32 @@
-load(":defs.bzl", "remote_execution_platform")
+load("@prelude//platforms:defs.bzl", "execution_platform", "host_configuration")
+load(":defs.bzl", "extended_execution_platform", "execution_platforms")
 
-remote_execution_platform(
-    name = "nativelink",
-    cpu_configuration = "prelude//cpu:x86_64",
-    os_configuration = "prelude//os:linux",
-    use_windows_path_separators = False,
+execution_platform(
+    name = "default",
+    cpu_configuration = host_configuration.cpu,
+    os_configuration = host_configuration.os,
+    use_windows_path_separators = host_info().os.is_windows,
+)
+
+execution_platforms(
+    name = "platforms",
+    platforms = [
+        ":rust_default",
+        ":rust_nightly-2025-01-10",
+    ],
+    visibility = ["PUBLIC"],
+)
+
+extended_execution_platform(
+    name = "rust_default",
+    base_platform = ":default",
+    constraint_values = ["root//constraints:default"],
+    visibility = ["PUBLIC"],
+)
+
+extended_execution_platform(
+    name = "rust_nightly-2025-01-10",
+    base_platform = ":default",
+    constraint_values = ["root//constraints:nightly-2025-01-10"],
     visibility = ["PUBLIC"],
 )

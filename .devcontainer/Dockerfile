@@ -1,11 +1,11 @@
-FROM almalinux:8.10-20250307
+FROM almalinux:9.5-20250411
 
 # Install tools and dependencies
 # Reindeer: openssl-devel
 RUN dnf update -y \
     && dnf group install -y "Development Tools" \
     && dnf install -y glibc-langpack-en sudo tzdata \
-    && dnf install -y curl openssl-devel
+    && dnf install -y openssl-devel
 
 # Install Docker
 ARG DOCKER_GID
@@ -28,13 +28,15 @@ RUN useradd -m -s /bin/bash -u $USER_UID $USERNAME \
     && usermod -aG docker $USERNAME
 USER $USERNAME
 
-# Install Rust with nightly-2024-11-22 toolchain (required by Buck2)
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2024-11-22 -y
+# Install Rust with nightly-2025-02-16 (required by Buck2) and nightly-2025-01-10 toolchains
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2025-02-16 -y
 ENV PATH="/home/$USERNAME/.cargo/bin:$PATH"
+# rust-mir-checker: clippy, rustfmt, rustc-dev, rust-src, rust-std, llvm-tools-preview
+RUN rustup toolchain install nightly-2025-01-10 --component clippy,rustfmt,rustc-dev,rust-src,rust-std,llvm-tools-preview
 
 # Install Buck2 and Reindeer
-RUN cargo install --git https://github.com/yxdai-nju/buck2.git --rev 4813980 buck2
-RUN cargo install --git https://github.com/facebookincubator/reindeer.git --rev a81ef2c reindeer
+RUN cargo +nightly-2025-02-16 install --git https://github.com/yxdai-nju/buck2.git --rev e575b5b buck2
+RUN cargo +nightly-2025-02-16 install --git https://github.com/yxdai-nju/reindeer.git --rev 6ab7154 reindeer
 
 # Create and set permissions for workspace directory
 USER root

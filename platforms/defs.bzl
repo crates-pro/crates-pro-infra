@@ -1,25 +1,27 @@
-# Copyright (c) Meta Platforms, Inc. and affiliates.
-#
-# This source code is licensed under both the MIT license found in the
-# LICENSE-MIT file in the root directory of this source tree and the Apache
-# License, Version 2.0 found in the LICENSE-APACHE file in the root directory
-# of this source tree.
+load("@prelude//configurations:util.bzl", "util")
 
-def _remote_execution_platform_impl(ctx: AnalysisContext) -> list[Provider]:
-    constraints = dict()
-    constraints.update(ctx.attrs.cpu_configuration[ConfigurationInfo].constraints)
-    constraints.update(ctx.attrs.os_configuration[ConfigurationInfo].constraints)
-    cfg = ConfigurationInfo(constraints = constraints, values = {})
+def _extended_execution_platform_impl(ctx: AnalysisContext) -> list[Provider]:
+    subinfos = (
+        [ctx.attrs.base_platform[PlatformInfo].configuration] +
+        [util.constraint_values_to_configuration(ctx.attrs.constraint_values)]
+    )
 
     name = ctx.label.raw_target()
-    platform = ExecutionPlatformInfo(
+    configuration = util.configuration_info_union(subinfos)
+
+    platform_info = PlatformInfo(
+        label = str(name),
+        configuration = configuration,
+    )
+
+    execution_platform_info = ExecutionPlatformInfo(
         label = name,
-        configuration = cfg,
+        configuration = configuration,
         executor_config = CommandExecutorConfig(
             local_enabled = False,
             remote_enabled = True,
             use_limited_hybrid = True,
-            use_windows_path_separators = ctx.attrs.use_windows_path_separators,
+            use_windows_path_separators = False,
             # Set those up based on what workers you've registered with NativeLink.
             remote_execution_properties = {
                 "OSFamily": "",
@@ -32,16 +34,32 @@ def _remote_execution_platform_impl(ctx: AnalysisContext) -> list[Provider]:
 
     return [
         DefaultInfo(),
-        platform,
-        PlatformInfo(label = str(name), configuration = cfg),
-        ExecutionPlatformRegistrationInfo(platforms = [platform])
+        platform_info,
+        execution_platform_info,
+        ExecutionPlatformRegistrationInfo(platforms = [execution_platform_info]),
     ]
 
-remote_execution_platform = rule(
-    impl = _remote_execution_platform_impl,
+extended_execution_platform = rule(
+    impl = _extended_execution_platform_impl,
     attrs = {
-        "cpu_configuration": attrs.dep(providers = [ConfigurationInfo]),
-        "os_configuration": attrs.dep(providers = [ConfigurationInfo]),
-        "use_windows_path_separators": attrs.bool(),
+        "base_platform": attrs.dep(providers = [PlatformInfo]),
+        "constraint_values": attrs.list(attrs.dep(providers = [ConstraintValueInfo])),
+    },
+)
+
+def _execution_platforms_impl(ctx: AnalysisContext) -> list[Provider]:
+    exec_platforms = []
+    for platforms in ctx.attrs.platforms:
+        exec_platforms = exec_platforms + platforms[ExecutionPlatformRegistrationInfo].platforms
+
+    return [
+        DefaultInfo(),
+        ExecutionPlatformRegistrationInfo(platforms = exec_platforms),
+    ]
+
+execution_platforms = rule(
+    impl = _execution_platforms_impl,
+    attrs = {
+        "platforms": attrs.list(attrs.dep(providers = [ExecutionPlatformRegistrationInfo])),
     },
 )
