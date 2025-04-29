@@ -9357,6 +9357,19 @@ cargo.rust_library(
     crate = "redis",
     crate_root = "redis-0.30.0.crate/src/lib.rs",
     edition = "2021",
+    env = {
+        "CARGO_CRATE_NAME": "redis",
+        "CARGO_MANIFEST_DIR": "redis-0.30.0.crate",
+        "CARGO_PKG_AUTHORS": "",
+        "CARGO_PKG_DESCRIPTION": "Redis driver for Rust.",
+        "CARGO_PKG_NAME": "redis",
+        "CARGO_PKG_REPOSITORY": "https://github.com/redis-rs/redis-rs",
+        "CARGO_PKG_VERSION": "0.30.0",
+        "CARGO_PKG_VERSION_MAJOR": "0",
+        "CARGO_PKG_VERSION_MINOR": "30",
+        "CARGO_PKG_VERSION_PATCH": "0",
+        "CARGO_PKG_VERSION_PRE": "",
+    },
     features = [
         "acl",
         "default",
@@ -15301,14 +15314,4 @@ buildscript_run(
         "zdict_builder",
     ],
     version = "2.0.15+zstd.1.5.7",
-)
-alias(
-    name = "libtugraph-sys-build-script-run",
-    actual = ":libtugraph-sys-0.1.2+3.5.0-build-script-run",
-    visibility = ["PUBLIC"],
-)
-alias(
-    name = "rustc_codegen_llvm-shared",
-    actual = ":rustc_codegen_llvm-0.0.0[shared]",
-    visibility = ["PUBLIC"],
 )

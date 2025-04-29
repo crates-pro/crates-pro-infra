@@ -4,7 +4,7 @@ ARG NPROC=8
 
 # Install build dependencies
 # cc (crates.io): clang
-# cmake (crates.io): cmake
+# cmake (crates.io), libgit2 (Dockerfile): cmake
 # OpenSSL 3.2.2 (Dockerfile): perl-FindBin, perl-IPC-Cmd, perl-Pod-Html
 RUN dnf update -y \
     && dnf group install -y "Development Tools" \
