@@ -1,7 +1,6 @@
 cargo_env = true
 
-[[buildscript]]
-[buildscript.rustc_flags.env]
+[buildscript.run.env]
 OPENSSL_LIB_DIR = "/usr/local/ssl/lib64"
 OPENSSL_INCLUDE_DIR = "/usr/local/ssl/include"
 OPT_LEVEL = "3"

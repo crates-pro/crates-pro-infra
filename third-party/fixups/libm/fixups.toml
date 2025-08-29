@@ -1,0 +1,6 @@
+buildscript.run = false
+cfgs = [
+    "f128_enabled",
+    "f16_enabled",
+    "optimizations_enabled",
+]

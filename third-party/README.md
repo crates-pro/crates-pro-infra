@@ -76,7 +76,7 @@ bzip2-sys==0.1.13+1.0.8
 libgit2-sys==0.18.1+1.9.0
 libssh2-sys==0.3.1
 lzma-sys==0.1.20
-rdkafka-sys==4.8.0+2.3.0
+rdkafka-sys==4.9.0+2.10.0
 ring==0.17.14
 zstd-sys==2.0.15+zstd.1.5.7
 ```

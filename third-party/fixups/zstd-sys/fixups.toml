@@ -2,6 +2,5 @@ rustc_flags = [
     "-lzstd",
 ]
 
-[[buildscript]]
-[buildscript.rustc_flags.env]
+[buildscript.run.env]
 ZSTD_SYS_USE_PKG_CONFIG = "1"

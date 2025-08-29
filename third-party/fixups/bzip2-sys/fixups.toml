@@ -3,6 +3,5 @@ rustc_flags = [
     "-lstatic=bz2",
 ]
 
-[[buildscript]]
-[buildscript.gen_srcs.env]
+[buildscript.run.env]
 OPT_LEVEL = "3"

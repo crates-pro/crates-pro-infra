@@ -1,6 +1,0 @@
-rustc_flags = [
-    "-llzma",
-]
-
-[[buildscript]]
-[buildscript.rustc_flags]

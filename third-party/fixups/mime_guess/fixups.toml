@@ -1,2 +1,4 @@
-[[buildscript]]
-[buildscript.gen_srcs]
+buildscript.run = true
+
+[env]
+MIME_TYPES_GENERATED_PATH = "$(location //third-party:mime_guess-2.0.5-build-script-run[out_dir])/mime_types_generated.rs"

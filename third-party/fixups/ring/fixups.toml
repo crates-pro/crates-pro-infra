@@ -6,14 +6,6 @@ rustc_flags = [
 
 [env]
 RING_CORE_PREFIX = "ring_core_0_17_14_"
-CARGO_PKG_VERSION_PRE = ""
 
-[[buildscript]]
-[buildscript.gen_srcs]
-[buildscript.gen_srcs.env]
-CARGO_MANIFEST_LINKS = "ring_core_0_17_14_"
-CARGO_PKG_VERSION_MAJOR = "0"
-CARGO_PKG_VERSION_MINOR = "17"
-CARGO_PKG_VERSION_PATCH = "14"
-CARGO_PKG_VERSION_PRE = ""
+[buildscript.run.env]
 OPT_LEVEL = "3"

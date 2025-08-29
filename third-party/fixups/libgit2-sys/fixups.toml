@@ -2,6 +2,5 @@ rustc_flags = [
     "-lgit2",
 ]
 
-[[buildscript]]
-[buildscript.rustc_flags.env]
+[buildscript.run.env]
 LIBGIT2_NO_VENDOR = "1"
