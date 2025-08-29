@@ -19,7 +19,7 @@ def _rust_toolchain_from_sysroot_path_impl(ctx):
         ),
     ]
 
-_rust_toolchain_from_sysroot_path_rule = rule(
+rust_toolchain_from_sysroot_path = rule(
     impl = _rust_toolchain_from_sysroot_path_impl,
     attrs = {
         "sysroot_path": attrs.string(),
@@ -30,14 +30,3 @@ _rust_toolchain_from_sysroot_path_rule = rule(
     },
     is_toolchain_rule = True,
 )
-
-def rust_toolchain_from_sysroot_path(name, **kwargs):
-    exec_compatible_with = select({
-        "root//constraints:default": ["root//constraints:default"],
-        "root//constraints:nightly-2025-01-10": ["root//constraints:nightly-2025-01-10"],
-    })
-    _rust_toolchain_from_sysroot_path_rule(
-        name = name,
-        exec_compatible_with = exec_compatible_with,
-        **kwargs,
-    )

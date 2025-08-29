@@ -12,7 +12,6 @@ execution_platforms(
     name = "platforms",
     platforms = [
         ":rust_default",
-        ":rust_nightly-2025-01-10",
     ],
     visibility = ["PUBLIC"],
 )
@@ -20,13 +19,6 @@ execution_platforms(
 extended_execution_platform(
     name = "rust_default",
     base_platform = ":default",
-    constraint_values = ["root//constraints:default"],
-    visibility = ["PUBLIC"],
-)
-
-extended_execution_platform(
-    name = "rust_nightly-2025-01-10",
-    base_platform = ":default",
-    constraint_values = ["root//constraints:nightly-2025-01-10"],
+    constraint_values = [],
     visibility = ["PUBLIC"],
 )
