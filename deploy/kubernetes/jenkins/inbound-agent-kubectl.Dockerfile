@@ -1,9 +1,9 @@
-FROM jenkins/inbound-agent:3299.v0d0d06908537-1-jdk17
+FROM jenkins/inbound-agent:3327.v868139a_d00e0-6-jdk21
 
 USER root
 
 # Install kubectl
-RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.28.12/bin/linux/amd64/kubectl" \
+RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.33.4/bin/linux/amd64/kubectl" \
     && chmod +x ./kubectl \
     && mv ./kubectl /usr/local/bin/kubectl
 

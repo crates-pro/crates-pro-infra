@@ -1,10 +1,10 @@
-FROM almalinux:9.5-20250411
+FROM almalinux:9.6-20250825
 
 # Install tools and dependencies
 # Reindeer: openssl-devel
 RUN dnf update -y \
     && dnf group install -y "Development Tools" \
-    && dnf install -y glibc-langpack-en sudo tzdata \
+    && dnf install -y dnf-plugins-core glibc-langpack-en sudo tzdata \
     && dnf install -y openssl-devel
 
 # Install Docker
@@ -14,7 +14,7 @@ RUN dnf config-manager --add-repo=https://download.docker.com/linux/centos/docke
     && dnf install -y docker-ce docker-ce-cli containerd.io
 
 # Install kubectl
-RUN curl -LO "https://dl.k8s.io/release/v1.28.12/bin/linux/amd64/kubectl" \
+RUN curl -LO "https://dl.k8s.io/release/v1.33.4/bin/linux/amd64/kubectl" \
     && chmod +x kubectl \
     && mv kubectl /usr/local/bin/
 
@@ -28,15 +28,13 @@ RUN useradd -m -s /bin/bash -u $USER_UID $USERNAME \
     && usermod -aG docker $USERNAME
 USER $USERNAME
 
-# Install Rust with nightly-2025-02-16 (required by Buck2) and nightly-2025-01-10 toolchains
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2025-02-16 -y
+# Install Rust with nightly-2025-06-20 (required by Buck2) toolchain
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- --default-toolchain nightly-2025-06-20 -y
 ENV PATH="/home/$USERNAME/.cargo/bin:$PATH"
-# rust-mir-checker: clippy, rustfmt, rustc-dev, rust-src, rust-std, llvm-tools-preview
-RUN rustup toolchain install nightly-2025-01-10 --component clippy,rustfmt,rustc-dev,rust-src,rust-std,llvm-tools-preview
 
 # Install Buck2 and Reindeer
-RUN cargo +nightly-2025-02-16 install --git https://github.com/yxdai-nju/buck2.git --rev e575b5b buck2
-RUN cargo +nightly-2025-02-16 install --git https://github.com/yxdai-nju/reindeer.git --rev 6ab7154 reindeer
+RUN cargo install --git https://github.com/facebook/buck2.git --rev 1055974 buck2
+RUN cargo install --git https://github.com/facebookincubator/reindeer.git --rev 1a71dbe reindeer
 
 # Create and set permissions for workspace directory
 USER root

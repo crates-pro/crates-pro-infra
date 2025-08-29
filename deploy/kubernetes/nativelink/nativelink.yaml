@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: nativelink-worker
-          image: localhost:30500/nativelink-worker:20250428-2128
+          image: localhost:30500/nativelink-worker:20250829-2146
           imagePullPolicy: Always
           volumeMounts:
             - name: nativelink-storage
